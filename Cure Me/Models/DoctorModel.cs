@@ -21,6 +21,7 @@ namespace Cure_Me.Models
         public virtual String Gender { get; set; }
         public virtual String Image_url { get; set; }
         public virtual String Image_name { get; set; }
+        //Test Comment for Github
 
         //public virtual void SetPassword(string password)
         //{
