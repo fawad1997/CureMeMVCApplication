@@ -1,0 +1,52 @@
+﻿@model Cure_Me.Areas.ViewModels.ManageDoctorEdit
+@{
+    ViewBag.Title = "Edit Doctor";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("EditDoctor", "ManageDoctor", FormMethod.Post))
+{
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="form-group">
+                @Html.LabelFor(x => x.Doctor.Name, new { @class = "control-label" })
+                @Html.TextBoxFor(x => x.Doctor.Name, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(x => x.Doctor.Email, new { @class = "control-label" })
+                @Html.TextBoxFor(x => x.Doctor.Email, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(x => x.Doctor.Phone, new { @class = "control-label" })
+                @Html.TextBoxFor(x => x.Doctor.Phone, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(x => x.Doctor.Age, new { @class = "control-label" })
+                @Html.TextBoxFor(x => x.Doctor.Age, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(x => x.Doctor.Experience, new { @class = "control-label" })
+                @Html.TextBoxFor(x => x.Doctor.Experience, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(x => x.Doctor.Specialization, new { @class = "control-label" })
+                @Html.TextBoxFor(x => x.Doctor.Specialization, new { @class = "form-control" })
+            </div>
+            @Html.HiddenFor(x => x.Doctor.ID)
+            @Html.HiddenFor(x => x.Doctor.Image_url)
+            @Html.HiddenFor(x => x.Doctor.Image_name)
+            @Html.HiddenFor(x => x.Doctor.Password)
+            @Html.HiddenFor(x => x.Doctor.Gender)
+            @Html.HiddenFor(x => x.Doctor.isDeleted)
+    </div>
+        <div class="col-lg-4">
+            <div class="panel panel-info">
+                <div class="panel-heading blue">Form Actions</div>
+                <div class="panel-body">
+                    <input type="submit" value="Update" class="btn btn-success btn-sm" />
+                    <a href="@Url.Action("DoctorList")">or cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

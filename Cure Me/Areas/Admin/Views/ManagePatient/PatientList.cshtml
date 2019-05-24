@@ -1,0 +1,64 @@
+﻿@model Cure_Me.Areas.Admin.ViewModels.ManagePatientList
+@{
+    ViewBag.Title = "Patient List";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <div class="portlet light portlet-fit bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="glyphicon glyphicon-list font-red"></i>
+                    <span class="caption-subject font-red sbold uppercase">Patient List </span>
+                </div>
+                <div class="actions">
+                </div>
+            </div>
+            <div class="portlet-body">
+                <table class="table table-striped table-hover table-bordered" id="sample_editable_1">
+                    <thead>
+                        <tr>
+                            <th>Registration No</th>
+                            <th> Full Name </th>
+                            <th> Gender </th>
+                            <th>Age</th>
+                            <th> Associated Doctor </th>
+                            <th> Phone Number </th>
+                            <th> Address </th>
+                            <th colspan="2" style="text-align:center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.PatientList.Count(); i++)
+                        {
+                            <tr>
+                                <td>@Model.PatientList.ElementAt(i).RegistrationNo</td>
+                                <td>@Model.PatientList.ElementAt(i).Name</td>
+                                <td>@Model.PatientList.ElementAt(i).Gender</td>
+                                <td>@Model.PatientList.ElementAt(i).Age</td>
+                                <td style="text-align:center">@Html.ActionLink(Model.assocDoc.ElementAt(i).Name, "DoctorProfile", "Profiles", new { DocID = Model.assocDoc.ElementAt(i).ID }, new { @class = "btn btn-sm grey-salsa btn-outline" }) </td>
+                                <td>@Model.PatientList.ElementAt(i).Phone</td>
+                                <td>@Model.PatientList.ElementAt(i).Address</td>
+                                <td style="text-align:center">
+                                    <a href="@Url.Action("EditPatient","ManagePatient",new { PatID = Model.PatientList.ElementAt(i).ID })" class="btn btn-sm btn-primary">
+                                        <i class="glyphicon glyphicon-edit"></i> edit
+                                    </a>
+                                </td>
+                                <td style="text-align:center">
+                                    <a href="@Url.Action("PatientProfile","Profiles",new { PatID = Model.PatientList.ElementAt(i).ID })" class="btn btn-sm btn-primary">
+                                        <i class="glyphicon glyphicon-eye-open"></i> view
+                                    </a>
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+</div>
+

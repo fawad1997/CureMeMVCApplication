@@ -1,0 +1,88 @@
+﻿@model Cure_Me.ViewModels.PatientGraphData
+<script type="text/javascript">
+        var data=[]
+        var category = [];
+        var pulse = [];
+    @foreach (var d in Model.readingList)
+        {
+            @:category.push("@d.Date_Time");
+            @:pulse.push(@d.Pulse);
+
+        }
+        for (var i = 0; i < @Model.readingList.Count() ;i++){
+            var d=  {
+                "category": category[i],
+                "reading": pulse[i],
+                "highlimit": 100,
+                "lowlimit": 60
+            }
+            data[i]=d
+        }
+
+			AmCharts.makeChart("apneapulsechart",
+				{
+					"type": "serial",
+					"categoryField": "category",
+					"startDuration": 1,
+					"theme": "default",
+					"categoryAxis": {
+						"gridPosition": "start"
+					},
+					"trendLines": [],
+					"graphs": [
+						{
+							"balloonText": "[[title]] of [[category]]:[[value]]",
+							"bullet": "round",
+							"fixedColumnWidth": -2,
+							"id": "AmGraph-1",
+							"lineColor": "#008000",
+							"title": "Pulse Charts",
+							"valueField": "reading"
+						},
+						{
+							"balloonColor": "#FF0000",
+							"bullet": "diamond",
+							"color": "#FF0000",
+							"columnWidth": 0,
+							"id": "AmGraph-4",
+							"lineColor": "#FF0000",
+							"lineThickness": 2,
+							"tabIndex": 0,
+							"title": "High Threshhold",
+							"valueField": "highlimit"
+						},
+						{
+							"bullet": "diamond",
+							"id": "AmGraph-5",
+							"lineColor": "#FF8000",
+							"lineThickness": 2,
+							"title": "Low Threshold",
+							"valueField": "lowlimit"
+						}
+					],
+					"guides": [],
+					"valueAxes": [
+						{
+							"id": "ValueAxis-1",
+							"title": "Readings"
+						}
+					],
+					"allLabels": [],
+					"balloon": {},
+					"legend": {
+						"enabled": true,
+						"useGraphSettings": true
+					},
+					"titles": [
+						{
+							"id": "Title-1",
+							"size": 15,
+							"text": "Pulse Chart"
+						}
+					],
+					"dataProvider":data
+				}
+			);
+</script>
+<div id="apneapulsechart" style="width: 100%; height: 400px; background-color: #FFFFFF;"></div>
+

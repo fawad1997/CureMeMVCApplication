@@ -1,0 +1,133 @@
+﻿@model Cure_Me.ViewModels.PatientGraphData
+
+<script>
+    var breathingdata=[]
+    var breathingDate = [];
+    var breathing = [];
+    @foreach (var d in Model.readingList)
+    {
+        @:breathingDate.push("@d.Date_Time");
+        @:breathing.push(@d.BreathingRate);
+
+    }
+    for (var i = 0; i < @Model.readingList.Count() ;i++){
+        var d=  {
+            "breathingDate":breathingDate[i],
+            "breathingReading": breathing[i],
+            "breathingLineColor":(breathing[i]<20 || breathing[i]>60)?"#DE5142":"#219AD6"
+        }
+        breathingdata[i]=d
+    }
+
+            var breathingChart;
+            var breathingChartData =breathingdata;
+
+            var breathingMin = 20;
+            var breathingMax=60;
+
+            AmCharts.ready(function () {
+
+                // SERIAL CHART
+                breathingChart = new AmCharts.AmSerialChart();
+
+                breathingChart.dataProvider = breathingChartData;
+                breathingChart.categoryField = "breathingDate";
+                breathingChart.dataDateFormat = "YYYY-MM-DD";
+                breathingChart.useDataSetColors= true;
+                breathingChart.pathToImages = "https://www.amCharts.com/lib/3/images/";
+                // AXES
+                // category
+                var breathingCategoryAxis = breathingChart.categoryAxis;
+                breathingCategoryAxis.parseDates = true; // as our data is breathingDate-based, we set parseDates to true
+                breathingCategoryAxis.minPeriod = "DD"; // our data is daily, so we set minPeriod to DD
+                breathingCategoryAxis.dashLength = 1;
+                breathingCategoryAxis.gridAlpha = 0.15;
+                breathingCategoryAxis.axisColor = "#DADADA";
+
+                // value
+                var breathingValueAxis = new AmCharts.ValueAxis();
+                breathingValueAxis.axisColor = "#DADADA";
+                breathingValueAxis.dashLength = 1;
+                breathingValueAxis.logarithmic = true; // this line makes axis logarithmic
+                breathingChart.addValueAxis(breathingValueAxis);
+
+                // GUIDE for average
+                var breathingGuide = new AmCharts.Guide();
+                breathingGuide.value = breathingMin;
+                breathingGuide.lineColor = "#CC0000";
+                breathingGuide.dashLength = 4;
+                //breathingGuide.label = "average";
+                breathingGuide.inside = true;
+                breathingGuide.lineAlpha = 1;
+                breathingValueAxis.addGuide(breathingGuide);
+
+                var breathingGuide2 = new AmCharts.Guide();
+                breathingGuide2.value = breathingMax;
+                breathingGuide2.lineColor = "#CC0000";
+                breathingGuide2.dashLength = 4;
+                //breathingGuide2.label = "highest";
+                breathingGuide2.inside = true;
+                breathingGuide2.lineAlpha = 1;
+                breathingValueAxis.addGuide(breathingGuide2);
+
+                // HORIZONTAL GREEN RANGE
+                var breathingGuidefill = new AmCharts.Guide();
+                breathingGuidefill.value = breathingMin;
+                breathingGuidefill.toValue = breathingMax;
+                breathingGuidefill.fillColor = "#00CC00";
+                breathingGuidefill.inside = true;
+                breathingGuidefill.fillAlpha = 0.2;
+                breathingGuidefill.lineAlpha = 0;
+                breathingValueAxis.addGuide(breathingGuidefill);
+
+                // GRAPH
+                var breathingGraph = new AmCharts.AmGraph();
+                breathingGraph.type = "line";
+                breathingGraph.bullet = "round";
+                breathingGraph.balloonText= " [[breathingReading]]";
+                breathingGraph.bullet
+                //breathingGraph.bulletColor = "LineColor";
+                breathingGraph.useLineColorForBulletBorder = true;
+                breathingGraph.bulletBorderAlpha = 1;
+                breathingGraph.bulletBorderThickness = 2;
+                breathingGraph.bulletSize = 7;
+                breathingGraph.lineColorField = "breathingLineColor";
+                breathingGraph.title = "Breathing";
+                breathingGraph.valueField = "breathingReading";
+                breathingGraph.lineThickness = 2;
+                breathingGraph.lineColor = "#00BBCC";
+                breathingChart.addGraph(breathingGraph);
+
+                // CURSOR
+                var breathingChartCursor = new AmCharts.ChartCursor();
+                breathingChartCursor.cursorPosition = "mouse";
+                breathingChart.addChartCursor(breathingChartCursor);
+
+                // changes cursor mode from pan to select
+                //function setPanSelect() {
+                //    var breathingChartCursor = breathingChart.breathingChartCursor;
+
+                //    if (document.getElementById("rb1").checked) {
+                //        breathingChartCursor.pan = false;
+                //        breathingChartCursor.zoomable = true;
+
+                //    } else {
+                //        breathingChartCursor.pan = true;
+                //    }
+                //    breathingChart.validateNow();
+                //}
+
+                // SCROLLBAR
+                var breathingChartScrollbar = new AmCharts.ChartScrollbar();
+                breathingChartScrollbar.graph = breathingGraph;
+                breathingChartScrollbar.scrollbarHeight = 30;
+                breathingChart.addChartScrollbar(breathingChartScrollbar);
+                mouseWheelZoomEnabled:true;
+                breathingChart.creditsPosition = "bottom-right";
+
+                // WRITE
+                breathingChart.write("breathingChart");
+            });
+</script>
+
+<div id="breathingChart" style="width: 100%; height: 400px;"></div>

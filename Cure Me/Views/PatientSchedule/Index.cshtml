@@ -1,0 +1,95 @@
+﻿@model Cure_Me.ViewModels.ScheduleIndex
+@{
+    ViewBag.Title = "Set Patient Schedule";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group has-warning">
+                <div class="input-icon right">
+                    @Html.DropDownList("patientID", Model.patientList, "Select Patient", new { onchange = "this.form.submit();", @class = "bs-select form-control input-lg", @style= "color: #C69E08" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    if (ViewBag.selected == 1)
+    {
+        if (ViewBag.success == 1)
+        {
+            <div class="alert alert-success">Sucessfully Updated</div>
+        }
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet light portlet-fit bordered">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class=" icon-layers font-green"></i>
+                            <span class="caption-subject font-green bold uppercase">Bio</span>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="mt-element-step">
+                            <div class="row step-no-background">
+                                <div class="col-md-4 mt-step-col">
+                                    <div class="mt-step-title uppercase font-grey-cascade">Registration</div>
+                                    <div class="mt-step-content font-grey-cascade">@Model.Patient.RegistrationNo</div>
+                                </div>
+                                <div class="col-md-4 mt-step-col error">
+                                    <div class="mt-step-title uppercase font-grey-cascade">Name</div>
+                                    <div class="mt-step-content font-grey-cascade">@Model.Patient.Name</div>
+                                </div>
+                                <div class="col-md-4 mt-step-col done">
+                                    <div class="mt-step-title uppercase font-grey-cascade">Currently</div>
+                                    <div class="mt-step-content font-grey-cascade">@Model.perDay readings/Day</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet light portlet-fit bordered">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class=" icon-layers font-red-sunglo"></i>
+                            <span class="caption-subject font-red-sunglo bold uppercase">Change Schedule</span>
+                        </div>
+                    </div>
+
+                    <div class="portlet-body">
+                        <div class="form-group has-success">
+                            <label class="control-label">Enter Reading Per Day for @Model.Patient.Name</label>
+                            <div class="input-icon right">
+                                <i class="icon-check tooltips" data-original-title="Enter no. of Reading per Day!" data-container="body"></i>
+                                <input type="text" name="perDay" class="form-control" /><br />
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-4 col-md-8">
+                                    <button type="reset" class="btn default">Cancel</button>
+                                    <button type="submit" class="btn blue">Update</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+    else
+    {
+        <div class="alert alert-warning">Please Select Any Patient</div>
+    }
+}
+
+

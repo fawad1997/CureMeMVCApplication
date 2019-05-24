@@ -1,0 +1,147 @@
+﻿@model Cure_Me.ViewModels.PatientGraphData
+
+<script type="text/javascript">
+    var data=[]
+    var category = [];
+    var temperature = [];
+    var pulse = [];
+    var brate = [];
+    @foreach (var d in Model.readingList)
+    {
+        @:category.push("@d.Date_Time");
+        @:temperature.push(@d.Temperature);
+        @:pulse.push(@d.Pulse);
+        @:brate.push(@d.BreathingRate);
+
+    }
+    for (var i = 0; i < @Model.readingList.Count() ;i++){
+        var d=  {
+            "category": category[i],
+            "temp": temperature[i],
+            "pulse": pulse[i],
+            "brate": brate[i]
+        }
+        data[i]=d
+    }
+
+    AmCharts.makeChart("sepsis",
+           {
+               "type": "serial",
+               "categoryField": "category",
+               "angle": 30,
+               "depth3D": 30,
+               "startDuration": 1,
+               "theme": "light",
+               "categoryAxis": {
+                   "forceShowField": "",
+                   "gridPosition": "start",
+                   "minPeriod": "ss",
+                   "twoLineMode": true,
+                   "axisAlpha": 0,
+                   "dashLength": 1,
+                   "title": "Time"
+               },
+               "trendLines": [],
+               "graphs": [
+                   {
+                       "balloonText": "[[title]] of [[category]]:[[value]]",
+                       "fillAlphas": 1,
+                       "id": "temp",
+                       "title": "Temperature",
+                       "type": "column",
+                       "valueField": "temp"
+
+                   },
+                   {
+                       "balloonText": "[[title]] of [[category]]:[[value]]",
+                       "fillAlphas": 1,
+                       "id": "pulse",
+                       "title": "Pulse",
+                       "type": "column",
+                       "valueField": "pulse"
+                   },
+                   {
+                       "balloonText": "[[title]] of [[category]]:[[value]]",
+                       "fillAlphas": 1,
+                       "id": "breathingrate",
+                       "title": "Breathing Rate",
+                       "type": "column",
+                       "valueField": "brate"
+                   }
+               ],
+               "guides": [],
+               "valueAxes": [
+                   {
+                       "id": "ValueAxis-1",
+                       "title": "Readings"
+                   }
+               ],
+               "allLabels": [],
+               "balloon": {},
+               "legend": {
+                   "enabled": true,
+                   "useGraphSettings": true
+               },
+               "titles": [
+                   {
+                       "alpha": 0,
+                       "id": "Title-1",
+                       "size": 15,
+                       "text": "Chart Title"
+                   }
+               ],
+               "dataProvider":data
+           }
+       );
+</script>
+@if (Model.readingList.Count() != 0) { 
+    <div class="portlet box green">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-calendar"></i>&nbsp; Last 5 Readings
+            </div>
+
+            <div class="tools">
+                <a href="javascript:;" class="collapse icon-arrow-down" style="text-decoration:none"> </a>
+            </div>
+        </div>
+        <div class="portlet-body form">
+
+            <div id="sepsis" style="width: 100%; height: 400px; background-color: #FFFFFF;"></div>
+        </div>
+    </div>
+    <h3>Below Tab</h3>
+    <div class="tabbable-line tabs-below">
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab_16_2_1">
+                @Html.Action("TemperatureChart", "PatientGraphs", new { id = Model.readingList.ElementAt(0).PatientID })
+            </div>
+            <div class="tab-pane" id="tab_16_2_2">
+                @Html.Action("PulseChart", "PatientGraphs", new { id = Model.readingList.ElementAt(0).PatientID })
+            </div>
+            <div class="tab-pane" id="tab_16_2_3">
+                @Html.Action("BreathingRateChart", "PatientGraphs", new { id = Model.readingList.ElementAt(0).PatientID })
+            </div>
+        </div>
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#tab_16_2_1" data-toggle="tab"> Temperature </a>
+            </li>
+            <li>
+                <a href="#tab_16_2_2" data-toggle="tab"> Pulse </a>
+            </li>
+            <li>
+                <a href="#tab_16_2_3" data-toggle="tab"> Breathing Rate </a>
+            </li>
+        </ul>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">No Data Available For Patient</div>
+}
+
+
+        
+
+

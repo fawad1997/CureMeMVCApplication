@@ -1,0 +1,135 @@
+﻿@model Cure_Me.ViewModels.PatientGraphData
+
+
+
+<script>
+    var sysBpdata=[]
+    var sysBpDate = [];
+    var sysBp = [];
+    @foreach (var d in Model.readingList)
+    {
+        @:sysBpDate.push("@d.Date_Time");
+        @:sysBp.push(@d.SystolicBP);
+
+    }
+    for (var i = 0; i < @Model.readingList.Count() ;i++){
+        var d=  {
+            "sysBpDate":sysBpDate[i],
+            "sysBpReading": sysBp[i],
+            "sysBpLineColor":(sysBp[i]<20 || sysBp[i]>40)?"#DE5142":"#219AD6"
+        }
+        sysBpdata[i]=d
+    }
+
+            var sysBpChart;
+            var sysBpChartData =sysBpdata;
+
+            var sysBpMin = 20;
+            var sysBpMax=40;
+
+            AmCharts.ready(function () {
+
+                // SERIAL CHART
+                sysBpChart = new AmCharts.AmSerialChart();
+
+                sysBpChart.dataProvider = sysBpChartData;
+                sysBpChart.categoryField = "sysBpDate";
+                sysBpChart.dataDateFormat = "YYYY-MM-DD";
+                sysBpChart.useDataSetColors= true;
+                sysBpChart.pathToImages = "https://www.amCharts.com/lib/3/images/";
+                // AXES
+                // category
+                var sysBpCategoryAxis = sysBpChart.categoryAxis;
+                sysBpCategoryAxis.parseDates = true; // as our data is sysBpDate-based, we set parseDates to true
+                sysBpCategoryAxis.minPeriod = "DD"; // our data is daily, so we set minPeriod to DD
+                sysBpCategoryAxis.dashLength = 1;
+                sysBpCategoryAxis.gridAlpha = 0.15;
+                sysBpCategoryAxis.axisColor = "#DADADA";
+
+                // value
+                var sysBpValueAxis = new AmCharts.ValueAxis();
+                sysBpValueAxis.axisColor = "#DADADA";
+                sysBpValueAxis.dashLength = 1;
+                sysBpValueAxis.logarithmic = true; // this line makes axis logarithmic
+                sysBpChart.addValueAxis(sysBpValueAxis);
+
+                // GUIDE for average
+                var sysBpGuide = new AmCharts.Guide();
+                sysBpGuide.value = sysBpMin;
+                sysBpGuide.lineColor = "#CC0000";
+                sysBpGuide.dashLength = 4;
+                //sysBpGuide.label = "average";
+                sysBpGuide.inside = true;
+                sysBpGuide.lineAlpha = 1;
+                sysBpValueAxis.addGuide(sysBpGuide);
+
+                var sysBpGuide2 = new AmCharts.Guide();
+                sysBpGuide2.value = sysBpMax;
+                sysBpGuide2.lineColor = "#CC0000";
+                sysBpGuide2.dashLength = 4;
+                //sysBpGuide2.label = "highest";
+                sysBpGuide2.inside = true;
+                sysBpGuide2.lineAlpha = 1;
+                sysBpValueAxis.addGuide(sysBpGuide2);
+
+                // HORIZONTAL GREEN RANGE
+                var sysBpGuidefill = new AmCharts.Guide();
+                sysBpGuidefill.value = sysBpMin;
+                sysBpGuidefill.toValue = sysBpMax;
+                sysBpGuidefill.fillColor = "#00CC00";
+                sysBpGuidefill.inside = true;
+                sysBpGuidefill.fillAlpha = 0.2;
+                sysBpGuidefill.lineAlpha = 0;
+                sysBpValueAxis.addGuide(sysBpGuidefill);
+
+                // GRAPH
+                var sysBpGraph = new AmCharts.AmGraph();
+                sysBpGraph.type = "line";
+                sysBpGraph.bullet = "round";
+                sysBpGraph.balloonText= " [[sysBpReading]]";
+                sysBpGraph.bullet
+                //sysBpGraph.bulletColor = "LineColor";
+                sysBpGraph.useLineColorForBulletBorder = true;
+                sysBpGraph.bulletBorderAlpha = 1;
+                sysBpGraph.bulletBorderThickness = 2;
+                sysBpGraph.bulletSize = 7;
+                sysBpGraph.lineColorField = "sysBpLineColor";
+                sysBpGraph.title = "SysBP";
+                sysBpGraph.valueField = "sysBpReading";
+                sysBpGraph.lineThickness = 2;
+                sysBpGraph.lineColor = "#00BBCC";
+                sysBpChart.addGraph(sysBpGraph);
+
+                // CURSOR
+                var sysBpChartCursor = new AmCharts.ChartCursor();
+                sysBpChartCursor.cursorPosition = "mouse";
+                sysBpChart.addChartCursor(sysBpChartCursor);
+
+                // changes cursor mode from pan to select
+                //function setPanSelect() {
+                //    var sysBpChartCursor = sysBpChart.sysBpChartCursor;
+
+                //    if (document.getElementById("rb1").checked) {
+                //        sysBpChartCursor.pan = false;
+                //        sysBpChartCursor.zoomable = true;
+
+                //    } else {
+                //        sysBpChartCursor.pan = true;
+                //    }
+                //    sysBpChart.validateNow();
+                //}
+
+                // SCROLLBAR
+                var sysBpChartScrollbar = new AmCharts.ChartScrollbar();
+                sysBpChartScrollbar.graph = sysBpGraph;
+                sysBpChartScrollbar.scrollbarHeight = 30;
+                sysBpChart.addChartScrollbar(sysBpChartScrollbar);
+                mouseWheelZoomEnabled:true;
+                sysBpChart.creditsPosition = "bottom-right";
+
+                // WRITE
+                sysBpChart.write("sysBpChart");
+            });
+</script>
+
+<div id="sysBpChart" style="width: 100%; height: 400px;"></div>

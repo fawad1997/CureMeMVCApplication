@@ -1,0 +1,73 @@
+﻿@model Cure_Me.ViewModels.DoctorNoticeBoardIndex
+@{
+    ViewBag.Title = "Doctor Notice Board";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="portlet-body">
+                <div class="mt-element-list">
+                    <div class="mt-list-head list-default green-soft">
+                        <div class="row">
+                            <div class="col-xs-8">
+                                <div class="list-head-title-container">
+                                    <h3 class="list-title uppercase sbold">Notice Board</h3>
+                                    <div class="list-date">@DateTime.UtcNow.Date.ToString("yyyy-MM-dd")</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-list-container list-default">
+                        <ul>
+                            @if (Model.docNotice.Count() <= 0)
+                            {
+                                <li class="mt-list-item">
+                                    <div class="list-icon-container">
+                                        <a href="javascript:;">
+                                            <i class="icon-close"></i>
+                                        </a>
+                                    </div>
+                                    <div class="list-item-content">
+                                        <h3 class="uppercase bold">
+                                            <a href="javascript:;">No Notice Available</a>
+                                        </h3>
+                                    </div>
+                                </li>
+                            }
+                            else
+                            {
+                                int i = 0;
+                                foreach (var notice in Model.docNotice)
+                                {
+                                    i++;
+                                    <li class="mt-list-item">
+                                        <div class="list-icon-container done">
+                                            <a href="javascript:;">
+                                                <i class="">@i</i>
+                                            </a>
+                                        </div>
+                                        <div class="list-datetime">
+                                            <span class="text-primary"> @notice.Date.AsDateTime().ToString("yyyy/MM/dd")</span>
+                                            <br /><span class="text-danger">@notice.ExpDate.AsDateTime().ToString("yyyy/MM/dd")</span>
+                                        </div>
+                                        <div class="list-item-content">
+                                            <h3 class="uppercase bold">
+                                                <a href="javascript:;">@notice.Title</a>
+                                            </h3>
+                                            <p>@notice.Description</p>
+                                        </div>
+                                    </li>
+                                }
+                            }
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+}

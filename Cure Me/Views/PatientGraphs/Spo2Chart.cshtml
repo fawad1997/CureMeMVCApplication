@@ -1,0 +1,135 @@
+﻿@model Cure_Me.ViewModels.PatientGraphData
+
+
+
+<script>
+    var spo2data=[]
+    var spo2Date = [];
+    var spo2 = [];
+    @foreach (var d in Model.readingList)
+    {
+        @:spo2Date.push("@d.Date_Time");
+        @:spo2.push(@d.Spo2);
+
+    }
+    for (var i = 0; i < @Model.readingList.Count() ;i++){
+        var d=  {
+            "spo2Date":spo2Date[i],
+            "spo2Reading": spo2[i],
+            "spo2LineColor":(spo2[i]<90 || spo2[i]>100)?"#DE5142":"#219AD6"
+        }
+        spo2data[i]=d
+    }
+
+            var spo2Chart;
+            var spo2ChartData =spo2data;
+
+            var spo2Min = 90;
+            var spo2Max=100;
+
+            AmCharts.ready(function () {
+
+                // SERIAL CHART
+                spo2Chart = new AmCharts.AmSerialChart();
+
+                spo2Chart.dataProvider = spo2ChartData;
+                spo2Chart.categoryField = "spo2Date";
+                spo2Chart.dataDateFormat = "YYYY-MM-DD";
+                spo2Chart.useDataSetColors= true;
+                spo2Chart.pathToImages = "https://www.amCharts.com/lib/3/images/";
+                // AXES
+                // category
+                var spo2CategoryAxis = spo2Chart.categoryAxis;
+                spo2CategoryAxis.parseDates = true; // as our data is spo2Date-based, we set parseDates to true
+                spo2CategoryAxis.minPeriod = "DD"; // our data is daily, so we set minPeriod to DD
+                spo2CategoryAxis.dashLength = 1;
+                spo2CategoryAxis.gridAlpha = 0.15;
+                spo2CategoryAxis.axisColor = "#DADADA";
+
+                // value
+                var spo2ValueAxis = new AmCharts.ValueAxis();
+                spo2ValueAxis.axisColor = "#DADADA";
+                spo2ValueAxis.dashLength = 1;
+                spo2ValueAxis.logarithmic = true; // this line makes axis logarithmic
+                spo2Chart.addValueAxis(spo2ValueAxis);
+
+                // GUIDE for average
+                var spo2Guide = new AmCharts.Guide();
+                spo2Guide.value = spo2Min;
+                spo2Guide.lineColor = "#CC0000";
+                spo2Guide.dashLength = 4;
+                //spo2Guide.label = "average";
+                spo2Guide.inside = true;
+                spo2Guide.lineAlpha = 1;
+                spo2ValueAxis.addGuide(spo2Guide);
+
+                var spo2Guide2 = new AmCharts.Guide();
+                spo2Guide2.value = spo2Max;
+                spo2Guide2.lineColor = "#CC0000";
+                spo2Guide2.dashLength = 4;
+                //spo2Guide2.label = "highest";
+                spo2Guide2.inside = true;
+                spo2Guide2.lineAlpha = 1;
+                spo2ValueAxis.addGuide(spo2Guide2);
+
+                // HORIZONTAL GREEN RANGE
+                var spo2Guidefill = new AmCharts.Guide();
+                spo2Guidefill.value = spo2Min;
+                spo2Guidefill.toValue = spo2Max;
+                spo2Guidefill.fillColor = "#00CC00";
+                spo2Guidefill.inside = true;
+                spo2Guidefill.fillAlpha = 0.2;
+                spo2Guidefill.lineAlpha = 0;
+                spo2ValueAxis.addGuide(spo2Guidefill);
+
+                // GRAPH
+                var spo2Graph = new AmCharts.AmGraph();
+                spo2Graph.type = "line";
+                spo2Graph.bullet = "round";
+                spo2Graph.balloonText= " [[spo2Reading]]";
+                spo2Graph.bullet
+                //spo2Graph.bulletColor = "LineColor";
+                spo2Graph.useLineColorForBulletBorder = true;
+                spo2Graph.bulletBorderAlpha = 1;
+                spo2Graph.bulletBorderThickness = 2;
+                spo2Graph.bulletSize = 7;
+                spo2Graph.lineColorField = "spo2LineColor";
+                spo2Graph.title = "Spo2";
+                spo2Graph.valueField = "spo2Reading";
+                spo2Graph.lineThickness = 2;
+                spo2Graph.lineColor = "#00BBCC";
+                spo2Chart.addGraph(spo2Graph);
+
+                // CURSOR
+                var spo2ChartCursor = new AmCharts.ChartCursor();
+                spo2ChartCursor.cursorPosition = "mouse";
+                spo2Chart.addChartCursor(spo2ChartCursor);
+
+                // changes cursor mode from pan to select
+                //function setPanSelect() {
+                //    var spo2ChartCursor = spo2Chart.spo2ChartCursor;
+
+                //    if (document.getElementById("rb1").checked) {
+                //        spo2ChartCursor.pan = false;
+                //        spo2ChartCursor.zoomable = true;
+
+                //    } else {
+                //        spo2ChartCursor.pan = true;
+                //    }
+                //    spo2Chart.validateNow();
+                //}
+
+                // SCROLLBAR
+                var spo2ChartScrollbar = new AmCharts.ChartScrollbar();
+                spo2ChartScrollbar.graph = spo2Graph;
+                spo2ChartScrollbar.scrollbarHeight = 30;
+                spo2Chart.addChartScrollbar(spo2ChartScrollbar);
+                mouseWheelZoomEnabled:true;
+                spo2Chart.creditsPosition = "bottom-right";
+
+                // WRITE
+                spo2Chart.write("spo2Chart");
+            });
+</script>
+
+<div id="spo2Chart" style="width: 100%; height: 400px;"></div>

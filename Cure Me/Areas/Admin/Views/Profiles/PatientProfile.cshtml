@@ -1,0 +1,119 @@
+﻿@model Cure_Me.Areas.Admin.ViewModels.PatientProfile
+@{
+    ViewBag.Title = Model.Patient.Name;
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="profile">
+    <div class="tabbable-line tabbable-full-width">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#tab_1_1" data-toggle="tab"> Patient Profile </a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab_1_1">
+                <div class="row">
+                    <div class="col-md-3">
+                        <ul class="list-unstyled profile-nav">
+                            <li>
+                                <img src="~/Content/images/people19.png" class="img-responsive pic-bordered" alt="" />
+                                <a href="javascript:;" class="profile-edit"> edit </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-8 profile-info">
+                                <h1 class="font-green sbold uppercase">@Model.Patient.Name</h1>
+                                <p>
+                                    @Model.Patient.RegistrationNo
+                                </p>
+                                <ul class="list-inline">
+                                    <li>
+                                        <i class="glyphicon glyphicon-envelope"></i> @Model.Patient.Email
+                                    </li>
+                                    <li>
+                                        <i class="glyphicon glyphicon-tag"></i> @Model.Patient.Gender
+                                    </li>
+                                </ul>
+                                <ul class="list-inline">
+                                    <li>
+                                        <i class="glyphicon glyphicon-star"></i> @Model.Patient.Age years Old
+                                    </li>
+                                    <li>
+                                        <i class="glyphicon glyphicon-phone-alt"></i> @Model.Patient.Phone
+                                    </li>
+                                </ul>
+                                <ul class="list-inline">
+                                    <li>
+                                        <i class="glyphicon glyphicon-home"></i> @Model.Patient.Address
+                                    </li>
+                                    <li>
+                                        <i class="glyphicon glyphicon-home"></i> @Model.Patient.RegistrationNo
+                                    </li>
+                                </ul>
+                            </div>
+                            <!--end col-md-8-->
+                            <div class="col-md-4">
+                                <div class="portlet sale-summary">
+                                    <div class="portlet-title">
+                                        <div class="caption font-red sbold">Disease Information</div>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <ul class="list-unstyled">
+                                            <li>
+                                                <span class="sale-info">
+                                                    Sepsis
+                                                </span>
+                                                @if (@Model.Sepsis)
+                                                {
+                                                    <span class="sale-num glyphicon glyphicon-ok"></span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="sale-num glyphicon glyphicon-remove"></span>
+                                                }
+                                            </li>
+                                            <li>
+                                                <span class="sale-info">
+                                                    Sleep Apnea
+                                                </span>
+                                                @if (@Model.SleepApnea)
+                                                {
+                                                    <span class="sale-num glyphicon glyphicon-ok"></span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="sale-num glyphicon glyphicon-remove"></span>
+                                                }
+                                            </li>
+                                            <li>
+                                                <span class="sale-info">
+                                                    Hyper Tension
+                                                </span>
+                                                @if (@Model.HyperTension)
+                                                {
+                                                    <span class="sale-num glyphicon glyphicon-ok"></span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="sale-num glyphicon glyphicon-remove"></span>
+                                                }
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end col-md-4-->
+                        </div>
+
+                        <!--end row-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

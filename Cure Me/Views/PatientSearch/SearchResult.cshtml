@@ -1,0 +1,49 @@
+﻿@model Cure_Me.ViewModels.PatientSearchSearchResult
+@{
+    ViewBag.Title = "SearchResult";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="search-page search-content-3">
+ @if (Model.SearchPatientList.Count() == 0)
+ {
+    <div class="alert alert-danger">Search Not Found</div>
+ }
+
+   @foreach (var pat in Model.SearchPatientList)
+   {
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="tile-container" style="background-color:white;width:250px;overflow-wrap:normal">
+                        <div class="tile-thumbnail">
+                            <a href="javascript:;" onclick="location.href='@Url.Action("Index", "PatientGraphs",new { id = pat.ID })'">
+                                @{ 
+                                    ViewBag.img = "IMG_" + pat.ID + ".jpg";
+                                }
+                                <img src="~/Content/images/patientAvatar/@ViewBag.img" style="overflow:no-content;width:250px;height:300px" />
+                            </a>
+                        </div>
+                        <div class="tile-title" >
+                            <h3>
+                                @Html.ActionLink(@pat.Name, "Index", "PatientGraphs", new { id = pat.ID }, new { @class = "btn btn-md green btn-outline", @style="margin-left:10px; width:170px" })
+                                <a href="javascript:;"  onclick="location.href='@Url.Action("Index", "PatientNotice")'" style="text-decoration:none;float:right;padding-right:10px">
+                                    <i class="icon-pin font-green-meadow"></i>
+                                </a>
+                               
+                            </h3>
+                            
+                            <h3 style="padding-bottom:15px">
+                                @Html.ActionLink(@pat.RegistrationNo, "Index", "PatientGraphs", new { id = pat.ID }, new { @class = "btn btn-md red btn-outline", @style = "margin-left:10px; width:170px" })
+                                <a onclick="location.href='@Url.Action("Index", "PatientRecomendation")'" href="javascript:;" style="text-decoration:none;float:right; padding-right:10px">
+                                    <i class="icon-pencil font-green-meadow"></i>
+                                </a>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         
+}
+</div>
+

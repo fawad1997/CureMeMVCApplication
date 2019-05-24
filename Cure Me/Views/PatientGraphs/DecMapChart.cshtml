@@ -1,0 +1,136 @@
+﻿@model Cure_Me.ViewModels.PatientGraphData
+
+
+
+<script>
+    var dexMapdata=[]
+    var dexMapDate = [];
+    var dexMap = [];
+    @foreach (var d in Model.readingList)
+    {
+        @:dexMapDate.push("@d.Date_Time");
+        @:dexMap.push(@d.DecreasingMap);
+
+    }
+    for (var i = 0; i < @Model.readingList.Count() ;i++){
+        var d=  {
+            "dexMapDate":dexMapDate[i],
+            "dexMapReading": dexMap[i],
+            "dexMapLineColor":(dexMap[i]<10 || dexMap[i]>40)?"#DE5142":"#219AD6"
+        }
+        dexMapdata[i]=d
+    }
+
+            var dexMapChart;
+            var dexMapChartData =dexMapdata;
+
+            var dexMapMin = 10;
+            var dexMapMax=40;
+
+            AmCharts.ready(function () {
+
+                // SERIAL CHART
+                dexMapChart = new AmCharts.AmSerialChart();
+
+                dexMapChart.dataProvider = dexMapChartData;
+                dexMapChart.categoryField = "dexMapDate";
+                dexMapChart.dataDateFormat = "YYYY-MM-DD";
+                dexMapChart.useDataSetColors= true;
+                dexMapChart.pathToImages = "https://www.amCharts.com/lib/3/images/";
+                // AXES
+                // category
+                var dexMapCategoryAxis = dexMapChart.categoryAxis;
+                dexMapCategoryAxis.parseDates = true; // as our data is dexMapDate-based, we set parseDates to true
+                dexMapCategoryAxis.minPeriod = "DD"; // our data is daily, so we set minPeriod to DD
+                dexMapCategoryAxis.dashLength = 1;
+                dexMapCategoryAxis.gridAlpha = 0.15;
+                dexMapCategoryAxis.axisColor = "#DADADA";
+
+                // value
+                var dexMapValueAxis = new AmCharts.ValueAxis();
+                dexMapValueAxis.axisColor = "#DADADA";
+                dexMapValueAxis.dashLength = 1;
+                dexMapValueAxis.logarithmic = true; // this line makes axis logarithmic
+                dexMapChart.addValueAxis(dexMapValueAxis);
+
+                // GUIDE for average
+                var dexMapGuide = new AmCharts.Guide();
+                dexMapGuide.value = dexMapMin;
+                dexMapGuide.lineColor = "#CC0000";
+                dexMapGuide.dashLength = 4;
+                //dexMapGuide.label = "average";
+                dexMapGuide.inside = true;
+                dexMapGuide.lineAlpha = 1;
+                dexMapValueAxis.addGuide(dexMapGuide);
+
+                var dexMapGuide2 = new AmCharts.Guide();
+                dexMapGuide2.value = dexMapMax;
+                dexMapGuide2.lineColor = "#CC0000";
+                dexMapGuide2.dashLength = 4;
+                //dexMapGuide2.label = "highest";
+                dexMapGuide2.inside = true;
+                dexMapGuide2.lineAlpha = 1;
+                dexMapValueAxis.addGuide(dexMapGuide2);
+
+                // HORIZONTAL GREEN RANGE
+                var dexMapGuidefill = new AmCharts.Guide();
+                dexMapGuidefill.value = dexMapMin;
+                dexMapGuidefill.toValue = dexMapMax;
+                dexMapGuidefill.fillColor = "#00CC00";
+                dexMapGuidefill.inside = true;
+                dexMapGuidefill.fillAlpha = 0.2;
+                dexMapGuidefill.lineAlpha = 0;
+                dexMapValueAxis.addGuide(dexMapGuidefill);
+
+                // GRAPH
+                var dexMapGraph = new AmCharts.AmGraph();
+                dexMapGraph.type = "line";
+                dexMapGraph.bullet = "round";
+                dexMapGraph.balloonText= " [[dexMapReading]]";
+                dexMapGraph.bullet
+                //dexMapGraph.bulletColor = "LineColor";
+                dexMapGraph.useLineColorForBulletBorder = true;
+                dexMapGraph.bulletBorderAlpha = 1;
+                dexMapGraph.bulletBorderThickness = 2;
+                dexMapGraph.bulletSize = 7;
+                dexMapGraph.lineColorField = "dexMapLineColor";
+                dexMapGraph.title = "DecMap";
+                dexMapGraph.valueField = "dexMapReading";
+                dexMapGraph.lineThickness = 2;
+                dexMapGraph.lineColor = "#00BBCC";
+                dexMapChart.addGraph(dexMapGraph);
+
+                // CURSOR
+                var dexMapChartCursor = new AmCharts.ChartCursor();
+                dexMapChartCursor.cursorPosition = "mouse";
+                dexMapChart.addChartCursor(dexMapChartCursor);
+
+                // changes cursor mode from pan to select
+                //function setPanSelect() {
+                //    var dexMapChartCursor = dexMapChart.dexMapChartCursor;
+
+                //    if (document.getElementById("rb1").checked) {
+                //        dexMapChartCursor.pan = false;
+                //        dexMapChartCursor.zoomable = true;
+
+                //    } else {
+                //        dexMapChartCursor.pan = true;
+                //    }
+                //    dexMapChart.validateNow();
+                //}
+
+                // SCROLLBAR
+                var dexMapChartScrollbar = new AmCharts.ChartScrollbar();
+                dexMapChartScrollbar.graph = dexMapGraph;
+                dexMapChartScrollbar.scrollbarHeight = 30;
+                dexMapChart.addChartScrollbar(dexMapChartScrollbar);
+                mouseWheelZoomEnabled:true;
+                dexMapChart.creditsPosition = "bottom-right";
+
+                // WRITE
+                dexMapChart.write("dexMapChart");
+            });
+</script>
+
+<div id="dexMapChart" style="width: 100%; height: 400px;"></div>
+

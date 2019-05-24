@@ -1,0 +1,57 @@
+﻿@model Cure_Me.ViewModels.RecomendationIndex
+@{
+    ViewBag.Title = "Send Recommendation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-md-12">
+        @if (ViewBag.successMsg != null)
+            {
+            <div class="note note-success">
+                <p>@ViewBag.successMsg</p>
+            </div>
+        }
+        <div class="portlet light portlet-fit bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="glyphicon glyphicon-check font-blue-sharp"></i>
+                    <span class="caption-subject font-blue-sharp bold uppercase">Patient Recomendation</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                @using (Html.BeginForm())
+                {
+                    <div class="form-body">
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label" style="text-align:left">Recomend To</label>
+                            <div class="col-md-8">
+                                @Html.DropDownList("recomendToID", Model.patientList, "Select Patient", new { @class = "bs-select form-control", @style = "color: #21A2AD" })
+                                <div class="form-control-focus"> </div>
+                                <span class="help-block">Select Patient</span>
+                            </div>
+                        </div>
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-2 control-label" style="text-align:left">Recomendation</label>
+                            <div class="col-md-8">
+                                <textarea name="recomendationMessage" class="form-control" rows="3"></textarea>
+                                <div class="form-control-focus"> </div>
+                                <span class="help-block">Type Recomendation</span>
+
+                            </div>
+                        </div>
+                    </div>
+                <br /><br /><br />
+                <hr />
+                <div class="form-actions">
+                    <div class="row">
+                        <div class="col-md-offset-4 col-md-8">
+                            <button type="reset" class="btn default">Cancel</button>
+                            <button type="submit" class="btn blue">Send</button>
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

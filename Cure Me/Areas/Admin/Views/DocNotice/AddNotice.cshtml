@@ -1,0 +1,81 @@
+﻿@model Cure_Me.Areas.Admin.ViewModels.DoctorNoticeAddNotice
+
+@{
+    ViewBag.Title = "Add Doctor Notice";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/page/bootstrap-fileinput.js"></script>
+
+<div class="row">
+    <div class="col-md-12">
+
+        @if (ViewBag.successMsg != null)
+            {
+            <div class="note note-success">
+                <p>@ViewBag.successMsg</p>
+            </div>
+        }
+        <!-- BEGIN PORTLET-->
+        <div class="portlet light form-fit bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="glyphicon glyphicon-pushpin font-red-mint"></i>
+                    <span class="caption-subject font-red-mint sbold uppercase">Add Notice</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <!-- BEGIN FORM-->
+                @using (Html.BeginForm("AddNotice", "DoctorNoticeBoard", new { @class = "form-horizontal form-bordered" }))
+                {
+                    <div class="form-body">
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-1 control-label" style="text-align:left"></label>
+                            <div class="col-md-10">
+                                <input name="Title" type="text" placeholder="Title" class="form-control font-green" />
+                                <div class="form-control-focus"> </div>
+                                <span class="help-block">Typing Title</span>
+
+                            </div>
+                        </div>
+                        <div class="form-group form-md-line-input">
+                            <label class="col-md-1 control-label" style="text-align:left"></label>
+                            <div class="col-md-10">
+                                <textarea name="Desc" class="form-control font-dark" rows="3" placeholder="Details"></textarea>
+                                <div class="form-control-focus"> </div>
+                                <span class="help-block">Typing Details</span>
+
+                            </div>
+                        </div>
+                        <br /><br /><br />
+                       
+                        <br /><br />
+                        <div class="form-group">
+                            <label class="control-label col-md-1"></label>
+                            <div class="col-md-4">
+                                <div class="form-control">
+                                    <input name="ExpDate" type="date" class="col-md-12">
+                                </div>
+                                <!-- /input-group -->
+                                <span class="help-block"> Select Expiration date </span>
+                            </div>
+                        </div>
+                    </div>
+                    <br /><br /><br />
+                    <hr />
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-offset-3 col-md-9">
+                                <input type="submit" value="Submit" class="btn green">
+                                <a href="javascript:;" class="btn btn-outline grey-salsa">Cancel</a>
+                            </div>
+                        </div>
+                    </div><br />
+                }
+                <!-- END FORM-->
+            </div>
+        </div>
+        <!-- END PORTLET-->
+    </div>
+</div>
+

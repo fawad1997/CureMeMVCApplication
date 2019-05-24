@@ -1,0 +1,136 @@
+﻿@model Cure_Me.ViewModels.PatientGraphData
+
+
+
+<script>
+    var sepsisPulsedata=[]
+    var sepsisPulseDate = [];
+    var sepsisPulse = [];
+    @foreach (var d in Model.readingList)
+    {
+        @:sepsisPulseDate.push("@d.Date_Time");
+        @:sepsisPulse.push(@d.Pulse);
+
+    }
+    for (var i = 0; i < @Model.readingList.Count() ;i++){
+        var d=  {
+            "sepsisPulseDate":sepsisPulseDate[i],
+            "sepsisPulseReading": sepsisPulse[i],
+            "sepsisPulseLineColor":(sepsisPulse[i]<90 || sepsisPulse[i]>120)?"#DE5142":"#219AD6"
+        }
+        sepsisPulsedata[i]=d
+    }
+
+            var sepsisPulseChart;
+            var sepsisPulseChartData =sepsisPulsedata;
+
+            var sepsisPulseMin = 90;
+            var sepsisPulseMax=120;
+
+            AmCharts.ready(function () {
+
+                // SERIAL CHART
+                sepsisPulseChart = new AmCharts.AmSerialChart();
+
+                sepsisPulseChart.dataProvider = sepsisPulseChartData;
+                sepsisPulseChart.categoryField = "sepsisPulseDate";
+                sepsisPulseChart.dataDateFormat = "YYYY-MM-DD";
+                sepsisPulseChart.useDataSetColors= true;
+                sepsisPulseChart.pathToImages = "https://www.amCharts.com/lib/3/images/";
+                // AXES
+                // category
+                var sepsisPulseCategoryAxis = sepsisPulseChart.categoryAxis;
+                sepsisPulseCategoryAxis.parseDates = true; // as our data is sepsisPulseDate-based, we set parseDates to true
+                sepsisPulseCategoryAxis.minPeriod = "DD"; // our data is daily, so we set minPeriod to DD
+                sepsisPulseCategoryAxis.dashLength = 1;
+                sepsisPulseCategoryAxis.gridAlpha = 0.15;
+                sepsisPulseCategoryAxis.axisColor = "#DADADA";
+
+                // value
+                var sepsisPulseValueAxis = new AmCharts.ValueAxis();
+                sepsisPulseValueAxis.axisColor = "#DADADA";
+                sepsisPulseValueAxis.dashLength = 1;
+                sepsisPulseValueAxis.logarithmic = true; // this line makes axis logarithmic
+                sepsisPulseChart.addValueAxis(sepsisPulseValueAxis);
+
+                // GUIDE for average
+                var sepsisPulseGuide = new AmCharts.Guide();
+                sepsisPulseGuide.value = sepsisPulseMin;
+                sepsisPulseGuide.lineColor = "#CC0000";
+                sepsisPulseGuide.dashLength = 4;
+                //sepsisPulseGuide.label = "average";
+                sepsisPulseGuide.inside = true;
+                sepsisPulseGuide.lineAlpha = 1;
+                sepsisPulseValueAxis.addGuide(sepsisPulseGuide);
+
+                var sepsisPulseGuide2 = new AmCharts.Guide();
+                sepsisPulseGuide2.value = sepsisPulseMax;
+                sepsisPulseGuide2.lineColor = "#CC0000";
+                sepsisPulseGuide2.dashLength = 4;
+                //sepsisPulseGuide2.label = "highest";
+                sepsisPulseGuide2.inside = true;
+                sepsisPulseGuide2.lineAlpha = 1;
+                sepsisPulseValueAxis.addGuide(sepsisPulseGuide2);
+
+                // HORIZONTAL GREEN RANGE
+                var sepsisPulseGuidefill = new AmCharts.Guide();
+                sepsisPulseGuidefill.value = sepsisPulseMin;
+                sepsisPulseGuidefill.toValue = sepsisPulseMax;
+                sepsisPulseGuidefill.fillColor = "#00CC00";
+                sepsisPulseGuidefill.inside = true;
+                sepsisPulseGuidefill.fillAlpha = 0.2;
+                sepsisPulseGuidefill.lineAlpha = 0;
+                sepsisPulseValueAxis.addGuide(sepsisPulseGuidefill);
+
+                // GRAPH
+                var sepsisPulseGraph = new AmCharts.AmGraph();
+                sepsisPulseGraph.type = "line";
+                sepsisPulseGraph.bullet = "round";
+                sepsisPulseGraph.balloonText= " [[sepsisPulseReading]]";
+                sepsisPulseGraph.bullet
+                //sepsisPulseGraph.bulletColor = "LineColor";
+                sepsisPulseGraph.useLineColorForBulletBorder = true;
+                sepsisPulseGraph.bulletBorderAlpha = 1;
+                sepsisPulseGraph.bulletBorderThickness = 2;
+                sepsisPulseGraph.bulletSize = 7;
+                sepsisPulseGraph.lineColorField = "sepsisPulseLineColor";
+                sepsisPulseGraph.title = "SepsisPulse";
+                sepsisPulseGraph.valueField = "sepsisPulseReading";
+                sepsisPulseGraph.lineThickness = 2;
+                sepsisPulseGraph.lineColor = "#00BBCC";
+                sepsisPulseChart.addGraph(sepsisPulseGraph);
+
+                // CURSOR
+                var sepsisPulseChartCursor = new AmCharts.ChartCursor();
+                sepsisPulseChartCursor.cursorPosition = "mouse";
+                sepsisPulseChart.addChartCursor(sepsisPulseChartCursor);
+
+                // changes cursor mode from pan to select
+                //function setPanSelect() {
+                //    var sepsisPulseChartCursor = sepsisPulseChart.sepsisPulseChartCursor;
+
+                //    if (document.getElementById("rb1").checked) {
+                //        sepsisPulseChartCursor.pan = false;
+                //        sepsisPulseChartCursor.zoomable = true;
+
+                //    } else {
+                //        sepsisPulseChartCursor.pan = true;
+                //    }
+                //    sepsisPulseChart.validateNow();
+                //}
+
+                // SCROLLBAR
+                var sepsisPulseChartScrollbar = new AmCharts.ChartScrollbar();
+                sepsisPulseChartScrollbar.graph = sepsisPulseGraph;
+                sepsisPulseChartScrollbar.scrollbarHeight = 30;
+                sepsisPulseChart.addChartScrollbar(sepsisPulseChartScrollbar);
+                mouseWheelZoomEnabled:true;
+                sepsisPulseChart.creditsPosition = "bottom-right";
+
+                // WRITE
+                sepsisPulseChart.write("sepsisPulseChart");
+            });
+</script>
+
+<div id="sepsisPulseChart" style="width: 100%; height: 400px;"></div>
+

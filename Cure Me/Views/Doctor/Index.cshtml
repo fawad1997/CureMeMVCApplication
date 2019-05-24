@@ -1,0 +1,279 @@
+﻿@model Cure_Me.ViewModels.DoctorIndex
+@{
+    ViewBag.Title = "Doctor Portal Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/page/bootstrap-fileinput.js"></script>
+@if (ViewBag.msg != "")
+{
+    <div class="note note-success">
+        <p>@ViewBag.msg</p>
+        @{ Cure_Me.Controllers.DoctorController.resetViewBagMessages();}
+    </div>
+}
+@if (ViewBag.err != "")
+{
+    <script>
+    (function foo(){
+        window.location.href = "#tab_3_3";
+    })()
+    </script>
+    <div class="note note-danger">
+        <p>@ViewBag.err</p>
+        @{ Cure_Me.Controllers.DoctorController.resetViewBagMessages();}
+    </div>
+            }
+<div class="profile">
+    <div class="tabbable-line tabbable-full-width">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#tab_1_1" data-toggle="tab"> Overview </a>
+            </li>
+            <li>
+                <a href="#tab_1_3" data-toggle="tab"> Account </a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab_1_1">
+                <div class="row">
+                    <div class="col-md-3">
+                        <ul class="list-unstyled profile-nav">
+                            <li>
+                                <img src="~/Content/images/avatar/@Model.Doctor.Image_name" class="img-responsive pic-bordered" alt="" />
+                                @*<a href="javascript:;" class="profile-edit"> edit </a>*@
+                            </li>
+                            @*
+                                <li>
+                                    <a href="javascript:;">
+                                        Messages
+                                        <span> 3 </span>
+                                    </a>
+                                </li>*@
+                            @*
+                                <li>
+                                    <a href="javascript:;"> Friends </a>
+                                </li>*@
+                            @*
+                                <li>
+                                    <a href="javascript:;"> Settings </a>
+                                </li>*@
+                        </ul>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-8 profile-info">
+                                <h1 class="font-green sbold uppercase">@Model.Doctor.Name</h1>
+                                <p>
+                                    @Model.Doctor.Specialization
+                                </p>
+                                <p>
+                                    <a class="icon-envelope" href="javascript:;"> @Model.Doctor.Email</a>
+                                </p>
+                                <ul class="list-inline">
+                                    <li>
+                                        <i class="icon-call-end"></i> @Model.Doctor.Phone
+                                    </li>
+                                    <li>
+                                        <i class="icon-flag"></i> @Model.Doctor.Experience years of Experience
+                                    </li>
+                                </ul>
+                            </div>
+                            <!--end col-md-8-->
+                            <!--end col-md-4-->
+                        </div>
+                        <!--end row-->
+                        <div class="tabbable-line tabbable-custom-profile">
+                            <ul class="nav nav-tabs">
+                                <li class="active">
+                                    <a href="#tab_1_11" data-toggle="tab"> @Model.Doctor.Name's Patients </a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab_1_11">
+                                    <div class="portlet-body">
+                                        <table class="table table-striped table-bordered table-advance table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        <i class="icon-users"></i> Name
+                                                    </th>
+                                                    <th class="hidden-xs">
+                                                        <i class="icon-envelope-open"></i> Email
+                                                    </th>
+                                                    <th>
+                                                        <i class="icon-pencil"></i> Registration ID
+                                                    </th>
+                                                    <th>
+                                                        <i class="icon-share"></i> View
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var pat in Model.PatientList)
+                                                {
+                                                    <tr>
+                                                        <td class="hidden-xs"> @pat.Name </td>
+                                                        <td class="hidden-xs"> @pat.Email </td>
+                                                        <td>
+                                                            @pat.RegistrationNo
+                                                            @if (pat.IsActive == 1 && pat.IsDelete != 1)
+                                                            {
+                                                                <span class="label label-success label-sm"> Active </span>
+                                                            }
+                                                            else if (pat.IsDelete == 1)
+                                                            {
+                                                                <span class="label label-danger label-sm"> Deleted </span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="label label-warning label-sm"> Not Active </span>
+                                                            }
+                                                        </td>
+                                                        @if (pat.IsActive == 1 && pat.IsDelete != 1)
+                                                        {
+                                                            <td>@Html.ActionLink("View", "Index", "PatientGraphs", new { id = pat.ID }, new { @class = "btn btn-sm grey-salsa btn-outline" }) </td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>
+                                                                <a class="btn btn-sm grey-salsa btn-outline disabled" href="javascript:;"> View </a>
+                                                            </td>
+                                                        }
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--tab_1_2-->
+            <div class="tab-pane" id="tab_1_3">
+                <div class="row profile-account">
+                    <div class="col-md-3">
+                        <ul class="ver-inline-menu tabbable margin-bottom-10">
+                            <li class="active">
+                                <a data-toggle="tab" href="#tab_1-1">
+                                    <i class="glyphicon glyphicon-pencil"></i> Personal info
+                                </a>
+                                <span class="after"> </span>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#tab_2-2">
+                                    <i class="glyphicon glyphicon-picture"></i> Change Avatar
+                                </a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" href="#tab_3_3">
+                                    <i class="glyphicon glyphicon-lock"></i> Change Password
+                                </a>
+                            </li>
+                            @*<li>
+                                <a data-toggle="tab" href="#tab_4-4">
+                                    <i class="fa fa-eye"></i> Privacity Settings
+                                </a>
+                            </li>*@
+                        </ul>
+                    </div>
+
+                    <div class="col-md-9">
+                        <div class="tab-content">
+                            <div id="tab_1-1" class="tab-pane active">
+                                @using (Html.BeginForm("UpdateInfo", "Doctor", "post"))
+                                {
+                                    <div class="form-group">
+                                        <label class="control-label">Name</label>
+                                        @Html.EditorFor(x => x.Doctor.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Email</label>
+                                        @Html.EditorFor(x => x.Doctor.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Mobile Number</label>
+                                        @Html.EditorFor(x => x.Doctor.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Specilization</label>
+                                        @Html.EditorFor(x => x.Doctor.Specialization, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Experience</label>
+                                        @Html.EditorFor(x => x.Doctor.Experience, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Age</label>
+                                        @Html.EditorFor(x => x.Doctor.Age, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                    <div class="margiv-top-10">
+                                        <input type="submit" class="btn green" value="Submit" />
+                                        <input type="reset" class="btn default" value="Reset" />
+                                    </div>
+                                    @Html.HiddenFor(x => x.Doctor.ID)
+                                    @Html.HiddenFor(x => x.Doctor.Password)
+                                    @Html.HiddenFor(x => x.Doctor.isDeleted)
+                                    @Html.HiddenFor(x => x.Doctor.Gender)
+                                    @Html.HiddenFor(x=>x.Doctor.Image_url)
+                                    @Html.HiddenFor(x=>x.Doctor.Image_name)
+                                }
+                            </div>
+
+
+                            <div id="tab_2-2" class="tab-pane">
+                                @using (Html.BeginForm("UpdateAvatar","Doctor", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                {
+                                    <div class="form-group">
+                                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                    <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 200px; height: 150px;"> </div>
+                                                    <div>
+                                                        <span class="btn red btn-outline btn-file">
+                                                            <span class="fileinput-new"> Select image </span>
+                                                            <span class="fileinput-exists"> Change </span>
+                                                            <input type="file" name="ImageUrl"/>
+                                                        </span>
+                                                        <a href="javascript:;" class="btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+                                                    </div>
+                                                </div>
+                                    </div>
+                                    <div class="margin-top-10">
+                                        <input type="submit" class="btn green" value="Change Avatar" />
+                                        <input type="reset" class="btn default" value="Cancel" />
+                                    </div>
+                                    @Html.HiddenFor(x => x.Doctor.ID)
+                                }
+                            </div>
+
+                            <div id="tab_3_3" class="tab-pane">
+                                @using (Html.BeginForm("UpdatePassword","Doctor","post"))
+                                {
+                                    <div class="form-group">
+                                        <label class="control-label">Current Password</label>
+                                        @Html.EditorFor(x => x.OldPassword, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">New Password</label>
+                                        @Html.EditorFor(x => x.NewPassword, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Re-type New Password</label>
+                                        @Html.EditorFor(x => x.CnfrmPassword, new { htmlAttributes = new { @class = "form-control" } })
+                                    </div>
+                                    <div class="margin-top-10">
+                                        <input type="submit" class="btn green" value="Change password" />
+                                        <input type="reset" class="btn default" value="Cancel" />
+                                    </div>
+                                    @Html.HiddenFor(x => x.Doctor.ID)
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end tab-pane-->
+            <!--end tab-pane-->
+        </div>
+    </div>
+</div>

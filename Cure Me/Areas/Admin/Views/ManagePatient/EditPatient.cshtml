@@ -1,0 +1,51 @@
+﻿@model Cure_Me.Areas.Admin.ViewModels.ManagePatientEdit
+@{
+    ViewBag.Title = "Edit Patient";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("EditPatient", "ManagePatient", FormMethod.Post))
+{
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="form-group">
+                @Html.LabelFor(x => x.Patient.Name, new { @class = "control-label" })
+                @Html.TextBoxFor(x => x.Patient.Name, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(x => x.Patient.Email, new { @class = "control-label" })
+                @Html.TextBoxFor(x => x.Patient.Email, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(x => x.Patient.Age, new { @class = "control-label" })
+                @Html.TextBoxFor(x => x.Patient.Age, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(x => x.Patient.Phone, new { @class = "control-label" })
+                @Html.TextBoxFor(x => x.Patient.Phone, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(x => x.Patient.Address, new { @class = "control-label" })
+                @Html.TextAreaFor(x => x.Patient.Address, new { @class = "form-control" })
+            </div>
+
+            @Html.HiddenFor(x => x.Patient.ID)
+            @Html.HiddenFor(x => x.Patient.RegistrationNo)
+            @Html.HiddenFor(x => x.Patient.Gender)
+            @Html.HiddenFor(x => x.Patient.Password)
+            @Html.HiddenFor(x => x.Patient.IsDelete)
+            @Html.HiddenFor(x => x.Patient.IsActive)
+        </div>
+        <div class="col-lg-4">
+            <div class="panel panel-info">
+                <div class="panel-heading blue">Form Actions</div>
+                <div class="panel-body">
+                    <input type="submit" value="Update" class="btn btn-success btn-sm" />
+                    <a href="@Url.Action("DoctorList")">or cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+

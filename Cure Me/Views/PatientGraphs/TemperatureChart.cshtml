@@ -1,0 +1,135 @@
+﻿@model Cure_Me.ViewModels.PatientGraphData
+
+
+
+<script>
+    var temperaturedata=[]
+    var temperatureDate = [];
+    var temperature = [];
+    @foreach (var d in Model.readingList)
+    {
+        @:temperatureDate.push("@d.Date_Time");
+        @:temperature.push(@d.Temperature);
+
+    }
+    for (var i = 0; i < @Model.readingList.Count() ;i++){
+        var d=  {
+            "temperatureDate":temperatureDate[i],
+            "temperatureReading": temperature[i],
+            "temperatureLineColor":(temperature[i]<36 || temperature[i]>38.3)?"#DE5142":"#219AD6"
+        }
+        temperaturedata[i]=d
+    }
+
+            var temperatureChart;
+            var temperatureChartData =temperaturedata;
+
+            var temperatureMin = 36;
+            var temperatureMax=38.3;
+
+            AmCharts.ready(function () {
+
+                // SERIAL CHART
+                temperatureChart = new AmCharts.AmSerialChart();
+
+                temperatureChart.dataProvider = temperatureChartData;
+                temperatureChart.categoryField = "temperatureDate";
+                temperatureChart.dataDateFormat = "YYYY-MM-DD";
+                temperatureChart.useDataSetColors= true;
+                temperatureChart.pathToImages = "https://www.amCharts.com/lib/3/images/";
+                // AXES
+                // category
+                var temperatureCategoryAxis = temperatureChart.categoryAxis;
+                temperatureCategoryAxis.parseDates = true; // as our data is temperatureDate-based, we set parseDates to true
+                temperatureCategoryAxis.minPeriod = "DD"; // our data is daily, so we set minPeriod to DD
+                temperatureCategoryAxis.dashLength = 1;
+                temperatureCategoryAxis.gridAlpha = 0.15;
+                temperatureCategoryAxis.axisColor = "#DADADA";
+
+                // value
+                var temperatureValueAxis = new AmCharts.ValueAxis();
+                temperatureValueAxis.axisColor = "#DADADA";
+                temperatureValueAxis.dashLength = 1;
+                temperatureValueAxis.logarithmic = true; // this line makes axis logarithmic
+                temperatureChart.addValueAxis(temperatureValueAxis);
+
+                // GUIDE for average
+                var temperatureGuide = new AmCharts.Guide();
+                temperatureGuide.value = temperatureMin;
+                temperatureGuide.lineColor = "#CC0000";
+                temperatureGuide.dashLength = 4;
+                //temperatureGuide.label = "average";
+                temperatureGuide.inside = true;
+                temperatureGuide.lineAlpha = 1;
+                temperatureValueAxis.addGuide(temperatureGuide);
+
+                var temperatureGuide2 = new AmCharts.Guide();
+                temperatureGuide2.value = temperatureMax;
+                temperatureGuide2.lineColor = "#CC0000";
+                temperatureGuide2.dashLength = 4;
+                //temperatureGuide2.label = "highest";
+                temperatureGuide2.inside = true;
+                temperatureGuide2.lineAlpha = 1;
+                temperatureValueAxis.addGuide(temperatureGuide2);
+
+                // HORIZONTAL GREEN RANGE
+                var temperatureGuidefill = new AmCharts.Guide();
+                temperatureGuidefill.value = temperatureMin;
+                temperatureGuidefill.toValue = temperatureMax;
+                temperatureGuidefill.fillColor = "#00CC00";
+                temperatureGuidefill.inside = true;
+                temperatureGuidefill.fillAlpha = 0.2;
+                temperatureGuidefill.lineAlpha = 0;
+                temperatureValueAxis.addGuide(temperatureGuidefill);
+
+                // GRAPH
+                var temperatureGraph = new AmCharts.AmGraph();
+                temperatureGraph.type = "line";
+                temperatureGraph.bullet = "round";
+                temperatureGraph.balloonText= " [[temperatureReading]]";
+                temperatureGraph.bullet
+                //temperatureGraph.bulletColor = "LineColor";
+                temperatureGraph.useLineColorForBulletBorder = true;
+                temperatureGraph.bulletBorderAlpha = 1;
+                temperatureGraph.bulletBorderThickness = 2;
+                temperatureGraph.bulletSize = 7;
+                temperatureGraph.lineColorField = "temperatureLineColor";
+                temperatureGraph.title = "temperature";
+                temperatureGraph.valueField = "temperatureReading";
+                temperatureGraph.lineThickness = 2;
+                temperatureGraph.lineColor = "#00BBCC";
+                temperatureChart.addGraph(temperatureGraph);
+
+                // CURSOR
+                var temperatureChartCursor = new AmCharts.ChartCursor();
+                temperatureChartCursor.cursorPosition = "mouse";
+                temperatureChart.addChartCursor(temperatureChartCursor);
+
+                // changes cursor mode from pan to select
+                //function setPanSelect() {
+                //    var temperatureChartCursor = temperatureChart.temperatureChartCursor;
+
+                //    if (document.getElementById("rb1").checked) {
+                //        temperatureChartCursor.pan = false;
+                //        temperatureChartCursor.zoomable = true;
+
+                //    } else {
+                //        temperatureChartCursor.pan = true;
+                //    }
+                //    temperatureChart.validateNow();
+                //}
+
+                // SCROLLBAR
+                var temperatureChartScrollbar = new AmCharts.ChartScrollbar();
+                temperatureChartScrollbar.graph = temperatureGraph;
+                temperatureChartScrollbar.scrollbarHeight = 30;
+                temperatureChart.addChartScrollbar(temperatureChartScrollbar);
+                mouseWheelZoomEnabled:true;
+                temperatureChart.creditsPosition = "bottom-right";
+
+                // WRITE
+                temperatureChart.write("temperatureChart");
+            });
+</script>
+
+<div id="temperatureChart" style="width: 100%; height: 400px;"></div>

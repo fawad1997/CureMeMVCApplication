@@ -1,0 +1,126 @@
+﻿@model Cure_Me.ViewModels.PatientGraphData
+<script type="text/javascript">
+    var data=[]
+    var category = [];
+    var spo2 = [];
+    var pulse = [];
+    @foreach (var d in Model.readingList)
+    {
+        @:category.push("@d.Date_Time");
+        @:spo2.push(@d.Spo2);
+        @:pulse.push(@d.Pulse);
+
+    }
+    for (var i = 0; i < @Model.readingList.Count() ;i++){
+        var d=  {
+            "category": category[i],
+            "spo2": spo2[i],
+            "pulse": pulse[i]
+        }
+        data[i]=d
+    }
+        AmCharts.makeChart("sleepapnea",
+				{
+					"type": "serial",
+					"categoryField": "category",
+					"angle": 30,
+					"depth3D": 30,
+					"startDuration": 1,
+					"theme": "light",
+					"categoryAxis": {
+						"forceShowField": "",
+						"gridPosition": "start",
+						"minPeriod": "ss",
+						"twoLineMode": true,
+						"axisAlpha": 0,
+						"dashLength": 1,
+						"title": "Time"
+					},
+					"trendLines": [],
+					"graphs": [
+						{
+							"balloonText": "[[title]] of [[category]]:[[value]]",
+							"fillAlphas": 1,
+							"id": "spo2",
+							"title": "Spo 2",
+							"type": "column",
+							"valueField": "spo2"
+						},
+						{
+							"balloonText": "[[title]] of [[category]]:[[value]]",
+							"fillAlphas": 1,
+							"id": "pulse",
+							"title": "Pulse",
+							"type": "column",
+							"valueField": "pulse"
+						}
+					],
+					"guides": [],
+					"valueAxes": [
+						{
+							"id": "ValueAxis-1",
+							"title": "Readings"
+						}
+					],
+					"allLabels": [],
+					"balloon": {},
+					"legend": {
+						"enabled": true,
+						"useGraphSettings": true
+					},
+					"titles": [
+						{
+							"alpha": 0,
+							"id": "Title-1",
+							"size": 15,
+							"text": "Chart Title"
+						}
+					],
+					"dataProvider":data
+				}
+			);
+</script>
+@if (Model.readingList.Count() != 0)
+{
+<div class="portlet box green">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-user-follow"></i>Most Recent Reading
+        </div>
+        <div class="tools">
+            <a href="javascript:;" class="collapse icon-arrow-down" style="text-decoration:none"> </a>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <div id="sleepapnea" style="width: 100%; height: 400px; background-color: #FFFFFF;"></div>
+    </div>
+</div>
+<h3>Below Tab</h3>
+    <div class="tabbable-line tabs-below">
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab_1">
+                @Html.Action("Spo2Chart", "PatientGraphs", new { id = Model.readingList.ElementAt(0).PatientID })
+            </div>
+            <div class="tab-pane" id="tab_2">
+                @Html.Action("SleepApneaPulseChart", "PatientGraphs", new { id = Model.readingList.ElementAt(0).PatientID })
+            </div>
+        </div>
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#tab_1" data-toggle="tab"> Spo2 </a>
+            </li>
+            <li>
+                <a href="#tab_2" data-toggle="tab"> Pulse </a>
+            </li>
+        </ul>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">No Data Available For Patient</div>
+}
+
+
+
+
+

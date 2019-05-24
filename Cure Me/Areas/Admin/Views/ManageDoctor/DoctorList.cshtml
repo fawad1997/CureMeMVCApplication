@@ -1,0 +1,68 @@
+﻿@model Cure_Me.Areas.ViewModels.ManageDoctorList
+@{
+    ViewBag.Title = "Doctor List";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+        <div class="portlet light portlet-fit bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="glyphicon glyphicon-list font-red"></i>
+                    <span class="caption-subject font-red sbold uppercase">Doctor List </span>
+                </div>
+                <div class="actions">
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table-toolbar">
+                    <div class="row">
+                        <div class="col-md-6">
+                                <a href="@Url.Action("DoctorRegistration","ManageDoctor")" class="btn btn-primary green">
+                                    <i class="glyphicon glyphicon-plus"></i> Register Doctor
+                                </a>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-striped table-hover table-bordered" id="sample_editable_1">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th> Full Name </th>
+                            <th> Email </th>
+                            <th> Phone Number </th>
+                            <th> Exerience </th>
+                            <th colspan="2" style="text-align:center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var doctor in Model.DoctorList)
+                        {
+                            <tr>
+                                <td>@Html.ActionLink(""+doctor.ID, "DoctorProfile", "Profiles", new { DocID = doctor.ID }, new { @class = "btn btn-sm grey-salsa btn-outline" }) </td>
+                                <td> @doctor.Name </td>
+                                <td> @doctor.Email </td>
+                                <td> @doctor.Phone </td>
+                                <td class="center"> @doctor.Experience </td>
+                                <td style="text-align:center">
+                                    <a href="@Url.Action("DoctorProfile","Profiles",new { DocID = doctor.ID })" class="btn btn-sm btn-primary">
+                                        <i class="glyphicon glyphicon-eye-open"></i> view
+                                    </a>
+                                </td>
+                                 <td style="text-align:center">
+                                    <a href="@Url.Action("EditDoctor","ManageDoctor",new { DocID = doctor.ID })" class="btn btn-sm btn-primary">
+                                        <i class="glyphicon glyphicon-edit"></i> edit
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- END EXAMPLE TABLE PORTLET-->
+    </div>
+</div>
+

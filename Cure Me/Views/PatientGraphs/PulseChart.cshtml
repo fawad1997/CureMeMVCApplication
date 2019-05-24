@@ -1,0 +1,135 @@
+﻿@model Cure_Me.ViewModels.PatientGraphData
+
+
+
+<script>
+    var pulsedata=[]
+    var pulseDate = [];
+    var pulse = [];
+    @foreach (var d in Model.readingList)
+    {
+        @:pulseDate.push("@d.Date_Time");
+        @:pulse.push(@d.Pulse);
+
+    }
+    for (var i = 0; i < @Model.readingList.Count() ;i++){
+        var d=  {
+            "pulseDate":pulseDate[i],
+            "pulseReading": pulse[i],
+            "pulseLineColor":(pulse[i]<60 || pulse[i]>100)?"#DE5142":"#219AD6"
+        }
+        pulsedata[i]=d
+    }
+
+            var pulseChart;
+            var pulseChartData =pulsedata;
+
+            var pulseMin = 60;
+            var pulseMax=100;
+
+            AmCharts.ready(function () {
+
+                // SERIAL CHART
+                pulseChart = new AmCharts.AmSerialChart();
+
+                pulseChart.dataProvider = pulseChartData;
+                pulseChart.categoryField = "pulseDate";
+                pulseChart.dataDateFormat = "YYYY-MM-DD";
+                pulseChart.useDataSetColors= true;
+                pulseChart.pathToImages = "https://www.amCharts.com/lib/3/images/";
+                // AXES
+                // category
+                var pulseCategoryAxis = pulseChart.categoryAxis;
+                pulseCategoryAxis.parseDates = true; // as our data is pulseDate-based, we set parseDates to true
+                pulseCategoryAxis.minPeriod = "DD"; // our data is daily, so we set minPeriod to DD
+                pulseCategoryAxis.dashLength = 1;
+                pulseCategoryAxis.gridAlpha = 0.15;
+                pulseCategoryAxis.axisColor = "#DADADA";
+
+                // value
+                var pulseValueAxis = new AmCharts.ValueAxis();
+                pulseValueAxis.axisColor = "#DADADA";
+                pulseValueAxis.dashLength = 1;
+                pulseValueAxis.logarithmic = true; // this line makes axis logarithmic
+                pulseChart.addValueAxis(pulseValueAxis);
+
+                // GUIDE for average
+                var pulseGuide = new AmCharts.Guide();
+                pulseGuide.value = pulseMin;
+                pulseGuide.lineColor = "#CC0000";
+                pulseGuide.dashLength = 4;
+                //pulseGuide.label = "average";
+                pulseGuide.inside = true;
+                pulseGuide.lineAlpha = 1;
+                pulseValueAxis.addGuide(pulseGuide);
+
+                var pulseGuide2 = new AmCharts.Guide();
+                pulseGuide2.value = pulseMax;
+                pulseGuide2.lineColor = "#CC0000";
+                pulseGuide2.dashLength = 4;
+                //pulseGuide2.label = "highest";
+                pulseGuide2.inside = true;
+                pulseGuide2.lineAlpha = 1;
+                pulseValueAxis.addGuide(pulseGuide2);
+
+                // HORIZONTAL GREEN RANGE
+                var pulseGuidefill = new AmCharts.Guide();
+                pulseGuidefill.value = pulseMin;
+                pulseGuidefill.toValue = pulseMax;
+                pulseGuidefill.fillColor = "#00CC00";
+                pulseGuidefill.inside = true;
+                pulseGuidefill.fillAlpha = 0.2;
+                pulseGuidefill.lineAlpha = 0;
+                pulseValueAxis.addGuide(pulseGuidefill);
+
+                // GRAPH
+                var pulseGraph = new AmCharts.AmGraph();
+                pulseGraph.type = "line";
+                pulseGraph.bullet = "round";
+                pulseGraph.balloonText= " [[pulseReading]]";
+                pulseGraph.bullet
+                //pulseGraph.bulletColor = "LineColor";
+                pulseGraph.useLineColorForBulletBorder = true;
+                pulseGraph.bulletBorderAlpha = 1;
+                pulseGraph.bulletBorderThickness = 2;
+                pulseGraph.bulletSize = 7;
+                pulseGraph.lineColorField = "pulseLineColor";
+                pulseGraph.title = "Pulse";
+                pulseGraph.valueField = "pulseReading";
+                pulseGraph.lineThickness = 2;
+                pulseGraph.lineColor = "#00BBCC";
+                pulseChart.addGraph(pulseGraph);
+
+                // CURSOR
+                var pulseChartCursor = new AmCharts.ChartCursor();
+                pulseChartCursor.cursorPosition = "mouse";
+                pulseChart.addChartCursor(pulseChartCursor);
+
+                // changes cursor mode from pan to select
+                //function setPanSelect() {
+                //    var pulseChartCursor = pulseChart.pulseChartCursor;
+
+                //    if (document.getElementById("rb1").checked) {
+                //        pulseChartCursor.pan = false;
+                //        pulseChartCursor.zoomable = true;
+
+                //    } else {
+                //        pulseChartCursor.pan = true;
+                //    }
+                //    pulseChart.validateNow();
+                //}
+
+                // SCROLLBAR
+                var pulseChartScrollbar = new AmCharts.ChartScrollbar();
+                pulseChartScrollbar.graph = pulseGraph;
+                pulseChartScrollbar.scrollbarHeight = 30;
+                pulseChart.addChartScrollbar(pulseChartScrollbar);
+                mouseWheelZoomEnabled:true;
+                pulseChart.creditsPosition = "bottom-right";
+
+                // WRITE
+                pulseChart.write("pulseChart");
+            });
+</script>
+
+<div id="pulseChart" style="width: 100%; height: 400px;"></div>

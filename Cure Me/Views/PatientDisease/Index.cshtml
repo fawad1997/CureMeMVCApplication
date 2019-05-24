@@ -1,0 +1,133 @@
+﻿@model Cure_Me.ViewModels.PatientDiseaseIndex
+@{
+    ViewBag.Title = "Patient Disease";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script>
+    var ComponentsBootstrapSwitch = function () { var t = function () { $(".switch-radio1").on("switch-change", function () { $(".switch-radio1").bootstrapSwitch("toggleRadioState") }), $(".switch-radio1").on("switch-change", function () { $(".switch-radio1").bootstrapSwitch("toggleRadioStateAllowUncheck") }), $(".switch-radio1").on("switch-change", function () { $(".switch-radio1").bootstrapSwitch("toggleRadioStateAllowUncheck", !1) }) }; return { init: function () { t() } } }(); jQuery(document).ready(function () { ComponentsBootstrapSwitch.init() });
+</script>
+@using (Html.BeginForm())
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group has-warning">
+                <div class="input-icon right">
+                    @Html.DropDownList("patientID", Model.patientList, "Select Patient", new { onchange = "this.form.submit();", @class = "bs-select form-control input-lg", @style = "color: #C69E08" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    if (ViewBag.selected == 1)
+    {
+        if (ViewBag.success == 1)
+        {
+            <div class="alert alert-success">Sucessfully Updated</div>
+        }
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet light portlet-fit bordered">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="glyphicon glyphicon-check font-green"></i>
+                            <span class="caption-subject font-green bold uppercase">Current Diseases</span>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="mt-element-step">
+                            <div class="row step-no-background">
+                                <div class="col-md-4 mt-step-col">
+                                    <div class="mt-step-title uppercase font-grey-cascade">Sepsis</div>
+                                    <div class="mt-step-number font-grey-cascade" style="border:none">
+                                        @if (Model.disease.Contains(1))
+                                        { <span class="glyphicon glyphicon-ok"></span> }
+                                        else
+                                        { <span class="glyphicon glyphicon-remove"></span> }
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mt-step-col error">
+                                    <div class="mt-step-title uppercase font-grey-cascade">SleepApnea</div>
+                                    <div class="mt-step-number font-grey" style="border:none">
+                                        @if (Model.disease.Contains(2))
+                                        { <span class="glyphicon glyphicon-ok"></span> }
+                                        else
+                                        { <span class="glyphicon glyphicon-remove"></span> }
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mt-step-col done">
+                                    <div class="mt-step-title uppercase font-grey-cascade">HiperTension</div>
+                                    <div class="mt-step-number bg-white font-grey" style="border:none">
+                                        @if (Model.disease.Contains(3))
+                                        { <span class="glyphicon glyphicon-ok"></span> }
+                                        else
+                                        { <span class="glyphicon glyphicon-remove"></span> }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet light portlet-fit bordered">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="glyphicon glyphicon-plus-sign font-yellow-crusta"></i>
+                            <span class="caption-subject font-yellow-crusta bold uppercase">Manage Disease</span>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="form-group has-success">
+                            <label class="control-label col-md-4">Sepsis</label>
+                            <div class="col-md-8">
+                                @Html.CheckBoxFor(x => x.Sepsis, new { @class = "make-switch", data_on_color = "success", data_off_color = "warning", data_on_text = "&nbsp;Enable&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", data_off_text = "&nbsp;Disable&nbsp;" })
+                                @*<input type="checkbox" @if (Model.disease.Contains(1)) { @: checked
+                                                                                              }
+                                       name="Sepsis" value="@Model.Sepsis" class="make-switch" data-on-color="success" data-off-color="warning" data-on-text="&nbsp;Enable&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" data-off-text="&nbsp;Disable&nbsp;">*@
+                            </div>
+                        </div><br /><br />
+                        <div class="form-group has-success">
+                            <label class="control-label col-md-4">Sleep Apnea</label>
+                            <div class="col-md-8">
+                                @*@Html.CheckBoxFor(x => x.SleepApnea, new { @class = "make-switch", data_on_color = "success", data_off_color = "warning", data_on_text = "&nbsp;Enable&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", data_off_text = "&nbsp;Disable&nbsp;" })*@
+
+
+                                <input type="checkbox" @if (Model.disease.Contains(2)) { @: checked
+                                                                                              }
+                                       name="SleepApnea" value="@Model.SleepApnea" class="make-switch" data-on-color="success" data-off-color="warning" data-on-text="&nbsp;Enable&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" data-off-text="&nbsp;Disable&nbsp;">
+                            </div>
+                        </div><br /><br />
+                        <div class="form-group has-success">
+                            <label class="control-label col-md-4">Hyper Tension</label>
+                            <div class="col-md-8">
+                                @*@Html.CheckBoxFor(x => x.HyperTension, new { @class = "make-switch", data_on_color = "success", data_off_color = "warning", data_on_text = "&nbsp;Enable&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", data_off_text = "&nbsp;Disable&nbsp;" })*@
+
+
+                                <input type="checkbox" @if (Model.disease.Contains(3)) { @: checked
+                                                                                              }
+                                       name="HyperTension" value="@Model.HyperTension" class="make-switch" data-on-color="success" data-off-color="warning" data-on-text="&nbsp;Enable&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" data-off-text="&nbsp;Disable&nbsp;">
+                            </div>
+                        </div>
+                        <br /><br /><br />
+                        <hr />
+                        <div class="form-actions">
+                            <div class="row">
+                                <div class="col-md-offset-4 col-md-8">
+                                    <button type="reset" class="btn default">Cancel</button>
+                                    <button type="submit" name="isUpdateReq" class="btn blue">Update</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">Please Select Any Patient</div>
+    }
+}

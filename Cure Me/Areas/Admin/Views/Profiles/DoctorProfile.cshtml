@@ -1,0 +1,158 @@
+﻿@model Cure_Me.ViewModels.DoctorIndex
+
+@{
+    ViewBag.Title = Model.Doctor.Name;
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="profile">
+    <div class="tabbable-line tabbable-full-width">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#tab_1_1" data-toggle="tab"> Doctor Profile </a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab_1_1">
+                <div class="row">
+                    <div class="col-md-3">
+                        <ul class="list-unstyled profile-nav">
+                            <li>
+                                <img src="~/Content/images/avatar/@Model.Doctor.Image_name" class="img-responsive pic-bordered" alt="" />
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-8 profile-info">
+                                <h1 class="font-green sbold uppercase">@Model.Doctor.Name</h1>
+                                <p>
+                                    @Model.Doctor.Specialization
+                                </p>
+                                <uls class="list-inline">
+                                    <li>
+                                        <i class="glyphicon glyphicon-envelope"></i> @Model.Doctor.Email
+                                    </li>
+                                    <li>
+                                        <i class="glyphicon glyphicon-star"></i> @Model.Doctor.Experience years of Experience
+                                    </li>
+                                </uls>
+                            </div>
+                            <!--end col-md-8-->
+                            <div class="col-md-4">
+                                <div class="portlet sale-summary">
+                                    <div class="portlet-title">
+                                        <div class="caption font-red sbold">Personal Information</div>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <ul class="list-unstyled">
+                                            <li>
+                                                <span class="sale-info">
+                                                    Name
+                                                    <i class="glyphicon glyphicon-user"></i>
+                                                </span>
+                                                <span class="sale-num uppercase"> @Model.Doctor.Name</span>
+                                            </li>
+                                            <li>
+                                                <span class="sale-info">
+                                                    Age
+                                                    <i class="glyphicon glyphicon-calendar"></i>
+                                                </span>
+                                                <span class="sale-num">@Model.Doctor.Age </span>
+                                            </li>
+                                            <li>
+                                                <span class="sale-info">
+                                                    Gender
+                                                    <i class="glyphicon glyphicon-tag"></i>
+                                                </span>
+                                                <span class="sale-num uppercase">@Model.Doctor.Gender </span>
+                                            </li>
+                                            <li>
+                                                <span class="sale-info">
+                                                    Phone
+                                                    <i class="glyphicon glyphicon-phone-alt"></i>
+                                                </span>
+                                                <span class="sale-num">@Model.Doctor.Phone </span>
+                                            </li>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end col-md-4-->
+                        </div>
+
+                        <!--end row-->
+                        <div class="tabbable-line tabbable-custom-profile">
+                            <ul class="nav nav-tabs">
+                                <li class="active">
+                                    <a href="#tab_1_11" data-toggle="tab"> @Model.Doctor.Name's Patients </a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab_1_11">
+                                    <div class="portlet-body">
+                                        <table class="table table-striped table-bordered table-advance table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>
+                                                        <i class="icon-users"></i> Name
+                                                    </th>
+                                                    <th class="hidden-xs">
+                                                        <i class="icon-envelope-open"></i> Email
+                                                    </th>
+                                                    <th>
+                                                        <i class="icon-pencil"></i> Registration ID
+                                                    </th>
+                                                    <th>
+                                                        <i class="icon-share"></i> View
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var pat in Model.PatientList)
+                                                {
+                                                    <tr>
+                                                        <td class="hidden-xs"> @pat.Name </td>
+                                                        <td class="hidden-xs"> @pat.Email </td>
+                                                        <td>
+                                                            @pat.RegistrationNo
+                                                            @if (pat.IsActive == 1 && pat.IsDelete != 1)
+                                                            {
+                                                                <span class="label label-success label-sm"> Active </span>
+                                                            }
+                                                            else if (pat.IsDelete == 1)
+                                                            {
+                                                                <span class="label label-danger label-sm"> Deleted </span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="label label-warning label-sm"> Not Active </span>
+                                                            }
+                                                        </td>
+                                                        @if (pat.IsActive == 1 && pat.IsDelete != 1)
+                                                        {
+                                                            <td>@Html.ActionLink("View", "PatientProfile", "Profiles", new { PatID = pat.ID }, new { @class = "btn btn-sm grey-salsa btn-outline" }) </td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td>
+                                                                <a class="btn btn-sm grey-salsa btn-outline disabled" href="javascript:;"> View </a>
+                                                            </td>
+                                                        }
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

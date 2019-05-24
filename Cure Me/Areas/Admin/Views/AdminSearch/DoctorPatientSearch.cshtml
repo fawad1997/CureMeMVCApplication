@@ -1,0 +1,76 @@
+﻿@model Cure_Me.Areas.Admin.ViewModels.AdminSearchDoctorPatientSearch
+@{
+    ViewBag.Title = "DoctorPatientSearch";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="search-page search-content-3">
+    @if (Model.PatientList.Count() == 0 && Model.DoctorList.Count()==0)
+    {
+        <div class="alert alert-danger">Search Not Found</div>
+    }
+
+    @foreach (var pat in Model.PatientList)
+    {
+        <div class="row">
+            <div class="col-md-4">
+                <div class="tile-container" style="background-color:white;width:250px;overflow-wrap:normal">
+                    <div class="tile-thumbnail">
+                        <a href="javascript:;" onclick="location.href='@Url.Action("PatientProfile", "Profiles", new { PatID = pat.ID })'">
+                            @{
+                                ViewBag.img = "IMG_" + pat.ID + ".jpg";
+                            }
+                            <img src="~/Content/images/patientAvatar/@ViewBag.img" style="overflow:no-content;width:250px;height:300px" />
+                        </a>
+                    </div>
+                    <div class="tile-title">
+                        <h3>
+                            @Html.ActionLink(@pat.Name, "PatientProfile", "Profiles", new { PatID = pat.ID }, new { @class = "btn btn-md green btn-outline", @style = "margin-left:10px; width:170px" })
+                            <a href="javascript:;" onclick="location.href='@Url.Action("EditPatient","ManagePatient",new { PatID = pat.ID })'" style="text-decoration:none;float:right;padding-right:10px">
+                                <i class="icon-pencil font-green-meadow"></i>
+                            </a>
+                        </h3>
+                        <h3 style="padding-bottom:15px">
+                            @Html.ActionLink(@pat.RegistrationNo, "PatientProfile", "Profiles", new { PatID = pat.ID }, new { @class = "btn btn-md red btn-outline", @style = "margin-left:10px; width:170px" })
+                            <a onclick="location.href='@Url.Action("PatientProfile", "Profiles", new { PatID = pat.ID })'" href="javascript:;" style="text-decoration:none;float:right; padding-right:10px">
+                                <i class="icon-eye font-green-meadow"></i>
+                            </a>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+    @foreach (var doc in Model.DoctorList)
+    {
+        <div class="row">
+            <div class="col-md-4">
+                <div class="tile-container" style="background-color:white;width:250px;overflow-wrap:normal">
+                    <div class="tile-thumbnail">
+                        <a href="javascript:;" onclick="location.href='@Url.Action("DoctorProfile", "Profiles", new { DocID = doc.ID })'" >
+                            <img src="~/Content/images/profile_user.jpg" style="overflow:no-content;width:250px" />
+                        </a>
+                    </div>
+                    <div class="tile-title">
+                        <h3>
+                            @Html.ActionLink(@doc.Name, "DoctorProfile", "Profiles", new { DocID = doc.ID }, new { @class = "btn btn-md green btn-outline", @style = "margin-left:10px; width:170px" })
+                            <a href="javascript:;" onclick="location.href='@Url.Action("EditDoctor","ManageDoctor",new { DocID = doc.ID })'" style="text-decoration:none;float:right;padding-right:10px">
+                                <i class="icon-pencil font-green-meadow"></i>
+                            </a>
+                        </h3>
+                        <h3 style="padding-bottom:15px">
+                            @Html.ActionLink(@doc.Email, "DoctorProfile", "Profiles", new { DocID = doc.ID }, new { @class = "btn btn-md red btn-outline", @style = "margin-left:10px; width:170px; overflow:auto" })
+                            <a onclick="location.href='@Url.Action("DoctorProfile", "Profiles", new { DocID = doc.ID })'" href="javascript:;" style="text-decoration:none;float:right; padding-right:10px">
+                                <i class="icon-eye font-green-meadow"></i>
+                            </a>
+                        </h3>
+                    </div>
+                </div>
+            </div>
+</div>
+    }
+    </div>
+
+

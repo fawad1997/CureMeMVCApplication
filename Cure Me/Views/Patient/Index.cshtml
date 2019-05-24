@@ -1,0 +1,99 @@
+﻿@model Cure_Me.ViewModels.PatientIndex
+@{
+    ViewBag.Title = "Register Patient";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        @if (ViewBag.registerationMessage != null)
+            {
+            <div class="note note-success">
+                <p>@ViewBag.registerationMessage</p>
+            </div>
+        }
+    </div>
+    <div class="col-lg-12">
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab_0">
+                <div class="portlet box green">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="icon-user-follow"></i>Register Patient
+                        </div>
+                        <div class="tools">
+                            <a href="javascript:;" class="collapse icon-arrow-down" style="text-decoration:none"> </a>
+                        </div>
+                    </div>
+                    <div class="portlet-body form">
+                        <!-- BEGIN FORM-->
+
+
+                        <form class="form-horizontal" method="post">
+                            @Html.ValidationSummary("", new { @style = "color:red;text-align:center" })
+                            <div class="form-body">
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label" style="font-size:medium; color:#8C8A8C"></label>
+                                    <div class="col-md-6">
+                                        <div class="input-icon">
+                                            <i class="icon-user"></i>
+                                            <input type="text" class="form-control input-circle" placeholder="Name" name="PatientName">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-md-checkboxes">
+                                            <label>Select Disease</label><br />
+
+                                            <div class="md-checkbox" style="margin-left:50px">
+                                                <div class="md-checkbox has-success">
+                                                    @Html.CheckBoxFor(x => x.sepsis, new { @class = "md-check" })
+                                                    <label for="sepsis">
+                                                        <span></span>
+                                                        <span class="check"></span>
+                                                        <span class="box"></span> Sepsis
+                                                    </label>
+                                                </div>
+                                                <div class="md-checkbox has-success">
+                                                    @Html.CheckBoxFor(x => x.sleepApnea, new { @class = "md-check" })
+                                                    <label for="sleepApnea">
+                                                        <span></span>
+                                                        <span class="check"></span>
+                                                        <span class="box"></span> Sleep Apnea
+                                                    </label>
+                                                </div>
+                                                <div class="md-checkbox has-success">
+                                                    @Html.CheckBoxFor(x => x.hypertension, new { @class = "md-check" })
+                                                    <label for="hypertension">
+                                                        <span></span>
+                                                        <span class="check"></span>
+                                                        <span class="box"></span> Hyper Tension
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <div class="row">
+                                    <div class="col-md-offset-3 col-md-9">
+                                        <button type="submit" class="btn btn-circle green">Submit</button>
+                                        <button type="reset" class="btn btn-circle grey-salsa btn-outline">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- END FORM-->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

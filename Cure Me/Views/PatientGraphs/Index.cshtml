@@ -1,0 +1,231 @@
+﻿@model Cure_Me.ViewModels.PatientGraphIndex
+@{
+    ViewBag.Title = Model.Patient.Name;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-md-12">
+        <!-- BEGIN PROFILE SIDEBAR -->
+        <div class="profile-sidebar">
+            <!-- PORTLET MAIN -->
+            <div class="portlet light profile-sidebar-portlet bordered">
+                <!-- SIDEBAR USERPIC -->
+                <div class="profile-userpic">
+                    <img src="~/Content/images/patientAvatar/@ViewBag.img" class="img-responsive" style="background-position:center center;width:150px;height:150px" alt="">
+                </div>
+                <!-- END SIDEBAR USERPIC -->
+                <!-- SIDEBAR USER TITLE -->
+                <div class="profile-usertitle">
+                    <div class="profile-usertitle-name"> @Model.Patient.Name </div>
+                    <div class="profile-usertitle-job"> Patient </div>
+                </div>
+                <!-- END SIDEBAR USER TITLE -->
+                <!-- SIDEBAR BUTTONS -->
+                <div class="profile-userbuttons" style="margin-bottom:30px">
+                    @Html.ActionLink("Recommend", "Index", "PatientRecomendation", new { @class = "btn btn-circle green btn-sm", @style = "width:150px" })
+                    @using (Html.BeginForm("Index", "PatientReadings", new { patientID = Model.Patient.ID }, FormMethod.Post))
+                    {
+                        <input style="display: inline; margin-top:10px;width:150px" type="submit" value="Readings" class="btn btn-circle red btn-sm" />
+                        // @Html.ActionLink("Readings", "Index", "PatientReadings", new { patientID = Model.Patient.ID }, new { @class = "btn btn-circle red btn-sm" })
+                    }
+                </div>
+                <!-- END SIDEBAR BUTTONS -->
+                <!-- SIDEBAR MENU -->
+                @*<div class="profile-usermenu">
+                        <ul class="nav">
+                            <li class="active">
+                                <a href="page_user_profile_1.html">
+                                    <i class="icon-home"></i> Overview
+                                </a>
+                            </li>
+                            <li>
+                                <a href="page_user_profile_1_account.html">
+                                    <i class="icon-settings"></i> Account Settings
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>*@
+                <!-- END MENU -->
+            </div>
+            <!-- END PORTLET MAIN -->
+            <!-- PORTLET MAIN -->
+            <!-- END PORTLET MAIN -->
+        </div>
+        <!-- END BEGIN PROFILE SIDEBAR -->
+        <!-- BEGIN PROFILE CONTENT -->
+        <div class="profile-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- BEGIN PORTLET -->
+                    <div class="portlet light bordered">
+                        <div class="portlet-title">
+                            <div class="caption caption-md">
+                                <i class="icon-bar-chart theme-font hide"></i>
+                                <span class="caption-subject font-blue-madison bold">Today's Activities</span>
+                                <span class="caption-helper hide">weekly stats...</span>
+                            </div>
+                            <div class="actions">
+                                <div class="btn-group btn-group-devided" data-toggle="buttons">
+                                    <label class="btn btn-transparent grey-salsa btn-circle btn-sm active">
+                                        <input type="radio" name="options" class="toggle" id="option1">@DateTime.UtcNow.Date.ToString("yyyy-MM-dd")
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="row number-stats margin-bottom-30">
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <div class="stat-left">
+                                        <div class="stat-chart">
+                                            <!-- do not line break "sparkline_bar" div. sparkline chart has an issue when the container div has line break -->
+                                            <div id="sparkline_bar"></div>
+                                        </div>
+                                        <div class="stat-number">
+                                            <div class="title"> Total </div>
+                                            <div class="number"><text class="text-success"> @Model.readings.Count()</text> </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <div class="stat-right">
+                                        <div class="stat-chart">
+                                            <!-- do not line break "sparkline_bar" div. sparkline chart has an issue when the container div has line break -->
+                                            <div id="sparkline_bar2"></div>
+                                        </div>
+                                        <div class="stat-number">
+                                            <div class="title ">Recomemded Readings/Day </div>
+                                            <div class="number"> <text class="text-danger">@Model.rPerDay</text></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-scrollable table-scrollable-borderless">
+                                <table class="table table-hover table-light">
+                                    <thead>
+                                        <tr class="uppercase">
+                                            @foreach (var disease in Model.diseases)
+                                            {
+                                                if (disease.DiseaseID == 1)
+                                                {
+                                                    Model.hasSepsis = true;
+                                                    <th class="panel-heading"> Temperature </th>
+                                                    <th class="panel-heading"> Pulse Rate </th>
+                                                    <th class="panel-heading"> Breathing Rate </th>
+                                                }
+                                                else if (disease.DiseaseID == 2)
+                                                {
+                                                    Model.hasSleepApnea = true;
+                                                    <th class="panel-heading"> Spo2 </th>
+                                                    <th class="panel-heading"> Pulse Rate </th>
+                                                }
+                                                else if (disease.DiseaseID == 3)
+                                                {
+                                                    Model.hasSleepApnea = true;
+                                                    <th class="panel-heading"> Systolic BP </th>
+                                                    <th class="panel-heading"> Decr MAP </th>
+                                                }
+                                            }
+                                        </tr>
+                                    </thead>
+                                    @foreach (var reading in Model.readings)
+                                    {
+                                        <tr>
+                                            @if (Model.hasSepsis)
+                                            {
+                                                <td> @reading.Temperature </td>
+                                                <td> @reading.Pulse </td>
+                                                <td> @reading.BreathingRate </td>
+
+                                            }
+                                            @if (Model.hasSleepApnea)
+                                            {
+                                                <td> @reading.Spo2 </td>
+                                                <td>
+                                                    <span class="bold theme-font ">@reading.Pulse</span>
+                                                </td>
+                                            }
+                                            @if (Model.hasHyperTension)
+                                            {
+                                                <td> @reading.SystolicBP </td>
+                                                <td> @reading.DecreasingMap </td>
+
+                                            }
+                                        </tr>
+                                    }
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END PORTLET -->
+                </div>
+            </div>
+        </div>
+        <!-- END PROFILE CONTENT -->
+    </div>
+</div>
+
+<div class="portlet box red">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-bar-chart"></i>&nbsp; @Model.Patient.Name 's Reading
+        </div>
+        <div class="tools">
+            <a href="javascript:;" class="collapse icon-arrow-down" style="text-decoration:none; color:White"> </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="tabbable-line">
+            <ul class="nav nav-tabs ">
+                <li class="active">
+                    <a href="#1" data-toggle="tab"> Temperature </a>
+                </li>
+                <li>
+                    <a href="#2" data-toggle="tab"> Pulse Rate </a>
+                </li>
+                <li>
+                    <a href="#3" data-toggle="tab"> Breathing rate </a>
+                </li>
+                <li>
+                    <a href="#4" data-toggle="tab"> Systolic Blood Presure </a>
+                </li>
+                <li>
+                    <a href="#5" data-toggle="tab"> Decreasing Mean Artial Pressure </a>
+                </li>
+                <li>
+                    <a href="#6" data-toggle="tab"> Spo2 </a>
+                </li>
+                <li>
+                    <a href="#7" data-toggle="tab"> Pulse </a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="1">
+                    @Html.Action("TemperatureChart", "PatientGraphs", new { id = Model.Patient.ID })
+                </div>
+                <div class="tab-pane" id="2">
+                    @Html.Action("PulseChart", "PatientGraphs", new { id = Model.Patient.ID })
+                </div>
+                <div class="tab-pane" id="3">
+                    @Html.Action("BreathingRChart", "PatientGraphs", new { id = Model.Patient.ID })
+                </div>
+                <div class="tab-pane" id="4">
+                    @Html.Action("SysBPChart", "PatientGraphs", new { id = Model.Patient.ID })
+                </div>
+                <div class="tab-pane" id="5">
+                    @Html.Action("DecMapChart", "PatientGraphs", new { id = Model.Patient.ID })
+                </div>
+                <div class="tab-pane" id="6">
+                    @Html.Action("Spo2Chart", "PatientGraphs", new { id = Model.Patient.ID })
+                </div>
+                <div class="tab-pane" id="7">
+                    @Html.Action("SepsisPulseChart", "PatientGraphs", new { id = Model.Patient.ID })
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
