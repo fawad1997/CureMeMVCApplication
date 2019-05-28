@@ -13,7 +13,8 @@ namespace Cure_Me.Areas.Admin.Controllers
         // GET: Admin/AdminLogin
         public ActionResult Index()
         {
-            return View();
+            return RedirectToAction("Index","Login");
+            //return View();
         }
 
         [HttpPost]

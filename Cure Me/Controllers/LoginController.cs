@@ -33,7 +33,7 @@ namespace Cure_Me.Controllers
             {
                 Session["DOCID"] = doc.ID; Session["DOCNAME"] = doc.Name;
                 Session["DOCAVATAR"] = doc.Image_name;
-                return RedirectToAction("Index", "Doctor");
+                return RedirectToAction("List", "Patient");
             }
             else
             {

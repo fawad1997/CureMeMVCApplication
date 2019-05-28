@@ -3,9 +3,9 @@
   <session-factory>
     <property name="dialect">NHibernate.Dialect.MsSql2000Dialect</property>
     <property name="connection.driver_class">NHibernate.Driver.SqlClientDriver</property>
-    <!--
-    <property name="connection.connection_string">Data Source=(LocalDb)DESKTOP-AI42I5A\SQLEXPRESS;Initial Catalog=CureMe;Integrated Security=true</property>
-    -->
     <property name="connection.connection_string">Server=DESKTOP-AI42I5A\SQLEXPRESS;Database=CureMe;User Id=sa;Password=F@wad1997;</property>
+    <!--
+    <property name="connection.connection_string">Data Source=203.99.190.159;Initial Catalog=CureMe;User ID=Alberuni;Password=123@a123AB;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False</property>
+    -->
   </session-factory>
 </hibernate-configuration>

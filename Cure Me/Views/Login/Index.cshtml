@@ -58,7 +58,7 @@
                     <input type="checkbox" name="remember" value="1" />Remember
                     <span></span>
                 </label>
-                @Html.ActionLink("Admin Login?", "Index", "AdminLogin", new { area = "Admin" }, new { @class = "forget-password", @style = "color:#6B798C" })
+                @*@Html.ActionLink("Admin Login?", "Index", "AdminLogin", new { area = "Admin" }, new { @class = "forget-password", @style = "color:#6B798C" })*@
 
 
             </div>
@@ -71,7 +71,7 @@
         </form>
         <!-- END LOGIN FORM -->
     </div>
-    <div class="copyright"> 2017 © Cure Me. Doctor Login. </div>
+    <div class="copyright"> @DateTime.Now.Year © Cure Me. Doctor Login. </div>
     <script src="~/Scripts/plugins/global/jquery.min.js" type="text/javascript"></script>
     <script src="~/Scripts/plugins/global/bootstrap.min.js" type="text/javascript"></script>
     <script src="~/Scripts/plugins/global/bootstrap-switch.min.js" type="text/javascript"></script>
